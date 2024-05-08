@@ -8,24 +8,24 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-    title: 'KT2L',
-    tagline: 'KT2L (ktool) is a web based tool to manage your kubernetes clusters.',
-//    favicon: 'img/favicon.ico',
+    title: 'mhus.de',
+    tagline: 'mhus.de is a collection of tools and libraries for (Java) developers from Me: mhus.',
+   // favicon: 'img/favicon.ico',
 
     onBrokenLinks: 'warn', // ideally this should have a stricter value set - 'throw'
     onBrokenMarkdownLinks: 'warn', // ideally this should have a stricter value set - 'throw'
     onDuplicateRoutes: 'warn', // ideally this should have a stricter value set - 'throw'
 
     // Set the production url of your site here
-    url: 'https://kt2l.org/',
+    url: 'https://mhus.de/',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/docs/',
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'KT2L', // Usually your GitHub org/user name.
-    projectName: 'KT2L', // Usually your repo name.
+    organizationName: 'mhus.de', // Usually your GitHub org/user name.
+    projectName: 'mhus.de', // Usually your repo name.
 
     // Even if you don't use internationalization, you can use this field to set
     // useful metadata like html lang. For example, if your site is Chinese, you
@@ -47,14 +47,14 @@ const config = {
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl:
-                        'https://github.com/mhus/kt2l/blob/main/docs',
+                        'https://github.com/mhus/mhus.de/blob/main/',
                 },
                 blog: {
                     showReadingTime: true,
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl:
-                        'https://github.com/mhus/kt2l/blob/main/docs',
+                        'https://blog.mhus.de',
                 },
                 theme: {
                     customCss: './src/css/custom.css',
@@ -74,11 +74,11 @@ const config = {
                 }
             },
             navbar: {
-                title: 'KT2L',
+                title: 'mhus.de',
                 logo: {
-                    alt: 'KT2L Logo',
-                    src: 'img/kt2l-logo.svg',
-                    href: 'https://kt2l.org',
+                    alt: 'mhus logo',
+                    src: 'img/logo.svg',
+                    href: '/',
                     target: '_self',
                 },
                 items: [
@@ -89,12 +89,12 @@ const config = {
                         label: 'Introduction',
                     },
                     {
-                        to: '/get-started',
-                        label: 'Get Started',
+                        to: 'http://kt2l.org',
+                        label: 'KT2L',
                         position: 'left'
                     },
                     {
-                        href: 'https://github.com/mhus/kt2l',
+                        href: 'https://github.com/mhus',
                         label: 'GitHub',
                         position: 'left',
                     },
@@ -110,28 +110,28 @@ const config = {
                                 label: 'Introduction',
                                 to: '/intro',
                             },
-                            {
-                                label: 'Get Started',
-                                to: '/get-started',
-                            },
                         ],
                     },
                     {
                         title: 'More',
                         items: [
                             {
-                                label: 'Website',
+                                label: 'KT2L',
                                 href: 'https://kt2l.org',
                                 target: '_self',
                             },
                             {
+                                label: 'Blog',
+                                href: 'https://blog.mhus.de',
+                            },
+                            {
                                 label: 'GitHub',
-                                href: 'https://github.com/mhus/kt2l',
+                                href: 'https://github.com/mhus',
                             },
                         ],
                     },
                 ],
-                copyright: `KT2L Documentation ${new Date().getFullYear()}. Built with Docusaurus.`,
+                copyright: `Mike Hummel ${new Date().getFullYear()}. Built with Docusaurus.`,
             },
             prism: {
                 theme: prismThemes.github,

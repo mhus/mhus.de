@@ -14,5 +14,3 @@ git clone https://github.com/mhus/container-examples-suite.git
 rm -rf ../mhus.de/docs/container-examples-suite
 mkdir -p ../mhus.de/docs/container-examples-suite
 cp -r container-examples-suite/docs/* ../mhus.de/docs/container-examples-suite/
-
-
