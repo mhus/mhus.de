@@ -104,11 +104,15 @@ const config = {
                 style: 'dark',
                 links: [
                     {
-                        title: 'Docs',
+                        title: 'Pages',
                         items: [
                             {
                                 label: 'Introduction',
                                 to: '/intro',
+                            },
+                            {
+                                label: 'Impressum',
+                                href: '../impressum.html',
                             },
                         ],
                     },
