@@ -113,6 +113,7 @@ const config = {
                             {
                                 label: 'Impressum',
                                 href: '../impressum.html',
+                                target: '_self',
                             },
                         ],
                     },
