@@ -25,7 +25,7 @@ jobs:
       - run: cd mhus.de;npm ci
       - run: cd mhus.de;npm run build
 #      - run: npm test
-      - run: rm -rf docs/docs/*
+      - run: rm -rf docs/docs/* || mkdir -p docs/docs || true
       - run: cp -r mhus.de/build/* docs/docs/
       - run: date > docs/lastupdate.txt
       - name: commit snapshot
