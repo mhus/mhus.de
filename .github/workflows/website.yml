@@ -1,0 +1,38 @@
+name: Website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'mhus.de/**'
+  workflow_dispatch:
+jobs:
+  build:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy_page
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import
+        run: ./launcher/import.sh
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21.7.2'
+      - run: cd mhus.de;npm ci
+      - run: cd mhus.de;npm run build
+#      - run: npm test
+      - run: rm -rf docs/static
+      - run: cp -r mhus.de/build/* docs/
+      - run: date > docs/lastupdate.txt
+      - name: commit snapshot
+        if: ${{ !startsWith(github.event.head_commit.message, 'wip:') }}
+        run: |
+          git add .
+          git config --global user.name 'Robot'
+          git config --global user.email 'mhus@users.noreply.github.com'
+          git commit -am "Webpage"
+          git push
