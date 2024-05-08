@@ -25,8 +25,8 @@ jobs:
       - run: cd mhus.de;npm ci
       - run: cd mhus.de;npm run build
 #      - run: npm test
-      - run: rm -rf docs/static
-      - run: cp -r mhus.de/build/* docs/
+      - run: rm -rf docs/docs/*
+      - run: cp -r mhus.de/build/* docs/docs/
       - run: date > docs/lastupdate.txt
       - name: commit snapshot
         if: ${{ !startsWith(github.event.head_commit.message, 'wip:') }}
