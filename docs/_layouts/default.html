@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0A1113" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
+  {% seo %}
+  <script>try{var t=localStorage.getItem("mhus-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="preload" href="{{ '/assets/fonts/inter.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ '/assets/fonts/inter-tight.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="{{ '/' | relative_url }}" aria-label="mhus.de — home">{% include mark.html %}<b>mhus</b><span class="tld">.de</span></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="{{ '/' | relative_url }}#projects">Projects</a>
+      <a href="{{ '/' | relative_url }}#focus">Focus</a>
+      <a href="{{ '/' | relative_url }}#career">Career</a>
+      <a href="{{ '/' | relative_url }}#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="plain" href="{{ site.github }}">GitHub</a>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle light / dark">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+{{ content }}
+</main>
+
+<footer>
+  <div class="wrap foot-bar">
+    <span>© {{ site.time | date: '%Y' }} {{ site.author }}</span>
+    <a href="{{ site.github }}">GitHub</a>
+    <a href="{{ site.blog }}">Blog</a>
+    <a href="{{ '/impressum' | relative_url }}" hreflang="de">Impressum</a>
+    <a href="{{ '/datenschutz' | relative_url }}" hreflang="de">Datenschutz</a>
+  </div>
+</footer>
+
+<script src="{{ '/assets/js/site.js' | relative_url }}"></script>
+</body>
+</html>
