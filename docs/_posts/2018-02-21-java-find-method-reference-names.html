@@ -1,0 +1,75 @@
+---
+title: "Java: Find Method Reference Names"
+date: 2018-02-21 21:33:00 +0100
+lang: en
+tags: []
+description: "Since Java 8 it's possible to use references to methods like it is in most other languages already standard. The notation is Class::MethodName, e.g. MyClass::myMethod But the new…"
+permalink: /blog/2018/02/java-find-method-reference-names.html
+origin: https://blog.mhus.de/2018/02/java-find-method-reference-names.html
+---
+{% raw %}
+Since Java 8 it's possible to use references to methods like it is in most other languages already standard. The notation is Class::MethodName, e.g. MyClass::myMethod<br />
+But the new Feature is not what it promise. The developer would expect to get a reference object like Method to work with the referenced method. But Java did not implement real References it packs the reference in a calling lambda expression. Something like (o) -&gt; o.myMethod() and returns a reference to this lambda construct.<br />
+<br />
+What a stupid behaviour!<br />
+<br />
+In this way it's not possible to get any information about the referenced method. Not the name or expected return type etc.<br />
+<br />
+Short: The solution is to analyse the byte code and grab the method name out of it. Like it's done here: <a href="https://github.com/mhus/mhus-lib/blob/master/mhu-lib-core/src/main/java/de/mhus/lib/core/util/lambda/LambdaUtil.java">https://github.com/mhus/mhus-lib/blob/master/mhu-lib-core/src/main/java/de/mhus/lib/core/util/lambda/LambdaUtil.java</a><br />
+<br />
+Long:<br />
+<br />
+<a name='more'></a><br />
+Using google I found only one solution to get the name of the referenced method. It's by calling the method itself and looking for the stacktrace and extract the name of the called method. The contra of this way is the active interference of the running program. Calling a method without the explicit need or knowledge of the consequences is not really clever.<br />
+<br />
+Therefore I searched another way to get the name of the reference and I found another not really clever, but not interferencing way for it. The basic idea is to get the byte code of the lambda expression and search for the referenced method inside it. It should be a small amount of code and it should be easy to extract the name and find some sort of readable information. Hopefully every time on the same place.<br />
+<br />
+The first challenge was to get the byte code of an existing lambda expression. I get help from a library called '<a href="http://bytebuddy.net/">Byte Buddy</a>' and 'Byte Buddy Agent'. With a little bit magic it will return the byte array (Thx a lot!).<br />
+<br />
+<pre>privatestaticfinal Instrumentation instrumentation = ByteBuddyAgent.install();
+staticbyte[] getByteCodeOf(Class&lt;?&gt; c) throws IOException {
+    ClassFileLocator locator = ClassFileLocator.AgentBased.of(instrumentation, c);
+    TypeDescription.ForLoadedType desc = new TypeDescription.ForLoadedType(c);
+    ClassFileLocator.Resolution resolution = locator.locate(desc.getName());
+    return resolution.resolve();
+}</pre>
+<br />
+After getting the byte code and using hex dumps to analyse the code I found that it was not simple like I hoped to find the method name. The dumps are very different depending of the nature of the method. But with analytic know how it's possible to isolate the method name. It's not my intention to analyse the code and understand the way it works. I remember from university this is a NP Hard Problem. Other people should deal with it.<br />
+<br />
+A sample:<br />
+<pre></pre>
+<pre>CAFEBABE 00000034 00160100 2664652F 6D687573  ￊ?ﾺﾾ&lt;00&gt;&lt;00&gt;&lt;00&gt;4&lt;00&gt;&lt;16&gt;&lt;01&gt;&lt;00&gt;&amp;de/mhus
+2F6C6962 2F746573 742F4C61 6D626461 54657374  /lib/test/LambdaTest
+24244C61 6D626461 24323307 00010100 106A6176  $$Lambda$23&lt;07&gt;&lt;00&gt;&lt;01&gt;&lt;01&gt;&lt;00&gt;&lt;10&gt;jav
+612F6C61 6E672F4F 626A6563 74070003 01001B6A  a/lang/Object&lt;07&gt;&lt;00&gt;&lt;03&gt;&lt;01&gt;&lt;00&gt;&lt;1B&gt;j
+6176612F 7574696C 2F66756E 6374696F 6E2F4675  ava/util/function/Fu
+6E637469 6F6E0700 05010006 3C696E69 743E0100  nction&lt;07&gt;&lt;00&gt;&lt;05&gt;&lt;01&gt;&lt;00&gt;&lt;06&gt;&lt;init&gt;&lt;01&gt;&lt;00&gt;
+03282956 0C000700 080A0004 00090100 05617070  &lt;03&gt;()V&lt;0C&gt;&lt;00&gt;&lt;07&gt;&lt;00&gt;&lt;08&gt;&lt;CR&gt;&lt;00&gt;&lt;04&gt;&lt;00&gt;&lt;TAB&gt;&lt;01&gt;&lt;00&gt;&lt;05&gt;app
+6C790100 26284C6A 6176612F 6C616E67 2F4F626A  ly&lt;01&gt;&lt;00&gt;&amp;(Ljava/lang/Obj
+6563743B 294C6A61 76612F6C 616E672F 4F626A65  ect;)Ljava/lang/Obje
+63743B01 00244C6A 6176612F 6C616E67 2F696E76  ct;&lt;01&gt;&lt;00&gt;$Ljava/lang/inv
+6F6B652F 4C616D62 6461466F 726D2448 69646465  oke/LambdaForm$Hidde
+6E3B0100 1C64652F 6D687573 2F6C6962 2F746573  n;&lt;01&gt;&lt;00&gt;&lt;1C&gt;de/mhus/lib/tes
+742F506F 6A6F4578 616D706C 6507000E 01000E67  t/PojoExample&lt;07&gt;&lt;00&gt;&lt;0E&gt;&lt;01&gt;&lt;00&gt;&lt;0E&gt;g
+65744D79 42797465 41727261 79010004 28295B42  etMyByteArray&lt;01&gt;&lt;00&gt;&lt;04&gt;()[B
+0C001000 110A000F 00120100 04436F64 65010019  &lt;0C&gt;&lt;00&gt;&lt;10&gt;&lt;00&gt;&lt;11&gt;&lt;CR&gt;&lt;00&gt;&lt;0F&gt;&lt;00&gt;&lt;12&gt;&lt;01&gt;&lt;00&gt;&lt;04&gt;Code&lt;01&gt;&lt;00&gt;&lt;19&gt;
+52756E74 696D6556 69736962 6C65416E 6E6F7461  RuntimeVisibleAnnota
+74696F6E 73103000 02000400 01000600 00000200  tions&lt;10&gt;0&lt;00&gt;&lt;02&gt;&lt;00&gt;&lt;04&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;06&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;02&gt;&lt;00&gt;
+02000700 08000100 14000000 11000100 01000000  &lt;02&gt;&lt;00&gt;&lt;07&gt;&lt;00&gt;&lt;08&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;11&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;
+052AB700 0AB10000 00000001 000B000C 00020014  &lt;05&gt;*ﾷ&lt;00&gt;&lt;CR&gt;ﾱ&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;0B&gt;&lt;00&gt;&lt;0C&gt;&lt;00&gt;&lt;02&gt;&lt;00&gt;&lt;14&gt;
+00000014 00010002 00000008 2BC0000F B60013B0  &lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;02&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;08&gt;+?&lt;00&gt;&lt;0F&gt;ﾶ&lt;00&gt;&lt;13&gt;ﾰ
+00000000 00150000 00060001 000D0000 0000      &lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;15&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;06&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;BR&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;</pre>
+<br />
+Let's try it with logic: First remove all the byte code command crap. They are separators to find the strings between them. Looks like there is no special byte code before or after the searched string (in this case 'getMyByteArray'). But I found it's every time after the pattern '$Hidden;'. Everything before should be ignored. Moreover ignore all string including impossible characters for method names like [ ( / etc. Most of the times I found the the method name in this way as the first accepted string.<br />
+<br />
+A special rule was needed for primitive return values. In this case a string like 'intValue' or 'charValue'. So I have to ignore the first occurrence of this strings. Not good if the method itself is 'intValue()'.<br />
+<br />
+As conclusion it is possible to get the name of the referenced method but it's a risk. If the signature of the lambda byte code changes in another java version or maybe another platform the algorithm to find the name could fail. But the benefits using method references instead of  strings including the name of the method (causing errors in runtime) are very important if you want to write robust and refactorable program code.<br />
+<br />
+The main problem is that Oracle fails to implement a correct method reference.<br />
+<br />
+Update:<br />
+<br />
+With java 9 and above this hack is no more working.<br />
+<br />
+{% endraw %}

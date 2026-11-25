@@ -1,0 +1,89 @@
+---
+title: "Update: Test your available CPU resources in karaf"
+date: 2018-03-05 21:56:00 +0100
+lang: en
+tags: []
+description: "In the new version coming up with mhus-osgi-tools 1.3.3 the test automatically adjust thread amount. It increase the thread count up to a level no more CPU time can be consumed.…"
+permalink: /blog/2018/03/update-test-your-available-cpu.html
+origin: https://blog.mhus.de/2018/03/update-test-your-available-cpu.html
+---
+{% raw %}
+In the new version coming up with mhus-osgi-tools 1.3.3 the test automatically adjust thread amount. It increase the thread count up to a level no more CPU time can be consumed.<br />
+<br />
+Here an example from my laptop using the autoInfo=true parameter to see how the algorithm is working:<br />
+<br />
+<pre><code>karaf@root()&gt; shityo stress autoInfo=true
+
+Used cpu nanoseconds per second ...
+
+CPU Time: 0 -&gt; 0 = 0%, Threads: 1
+
+Auto up
+
+1: [2] 998M 997M = 1.996G
+
+CPU Time: 0 -&gt; 1996520601 = 100%, Threads: 2
+
+Auto up
+
+2: [3] 995M 999M 997M = 2.992G
+
+CPU Time: 1996520601 -&gt; 2992796194 = 33%, Threads: 3
+
+Auto up
+
+3: [4] 998M 998M 998M 998M = 3.994G
+
+CPU Time: 2992796194 -&gt; 3994464892 = 25%, Threads: 4
+
+Auto up
+
+4: [5] 998M 998M 998M 998M 998M = 4.992G
+
+CPU Time: 3994464892 -&gt; 4992347050 = 19%, Threads: 5
+
+Auto up
+
+5: [6] 998M 998M 999M 999M 997M 998M = 5.991G
+
+CPU Time: 4992347050 -&gt; 5991369437 = 16%, Threads: 6
+
+Auto up
+
+6: [7] 997M 994M 998M 997M 997M 997M 996M = 6.979G
+
+CPU Time: 5991369437 -&gt; 6979148659 = 14%, Threads: 7
+
+Auto up
+
+7: [8] 998M 1.001G 996M 998M 998M 997M 999M 998M = 7.988G
+
+CPU Time: 6979148659 -&gt; 7988812936 = 12%, Threads: 8
+
+Auto up
+
+8: [9] 709M 1000M 945M 999M 888M 998M 997M 715M 743M = 7.999G
+
+CPU Time: 7988812936 -&gt; 7999455368 = 0%, Threads: 9
+
+9: [9] 745M 999M 999M 861M 998M 695M 998M 877M 823M = 7.999G
+
+CPU Time: 7999455368 -&gt; 7999942589 = 0%, Threads: 9
+
+10: [9] 999M 1000M 998M 829M 832M 683M 998M 813M 846M = 8.001G
+
+CPU Time: 7999942589 -&gt; 8001307750 = 0%, Threads: 9
+
+11: [9] 859M 878M 999M 999M 998M 739M 998M 767M 766M = 8.006G
+
+CPU Time: 8001307750 -&gt; 8006180402 = 0%, Threads: 9
+
+12: [9] 942M 853M 997M 997M 996M 997M 789M 714M 694M = 7.983G
+
+CPU Time: 8006180402 -&gt; 7983121568 = 0%, Threads: 9
+
+13: [9] 801M 997M 996M 942M 993M 753M 751M 744M 996M = 7.976G</code></pre>
+<br />
+<div>
+^C</div>
+{% endraw %}

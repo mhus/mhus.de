@@ -1,0 +1,19 @@
+---
+title: "Migrate to vaadin 8"
+date: 2020-10-15 16:01:00 +0200
+lang: en
+tags: [dev]
+description: "Since Vaadin 7 will no more supported in 2019 I need to migrate to a newer version of the library. I migrated to Vaadin 8 in mhu-lib 3.4.0, mhu-osgi-tools 1.4.3 and mhu-ports…"
+permalink: /blog/2020/10/dev-migrate-to-vaadin-8.html
+origin: https://blog.mhus.de/2020/10/dev-migrate-to-vaadin-8.html
+---
+{% raw %}
+<p> Since Vaadin 7 will no more supported in 2019 I need to migrate to a newer version of the library. I migrated to Vaadin 8 in mhu-lib 3.4.0, mhu-osgi-tools 1.4.3 and mhu-ports 1.3.6.</p><br />The new version no more supports tables (I will discuss pro and contra in another post) but a set of legacy packages will do it for the moment. There are also some other changes but they are more or less handy.<br /> <br />The migration of the application can be done by a tool. The tool will modify all java imports to the new - correct - packages. I was using the standalone tool (alternatively you can use a maven goal). Download the sources from <a href="https://github.com/vaadin/framework8-migration-tool">https://github.com/vaadin/framework8-migration-tool</a> and compile the project afterwards you can use the jar file to migrate your projects. Change location into your project home directory and execute the jar file<br /><br />java -jar $HOME/.m2/repository/com/vaadin/framework8-migration-tool/8.0-SNAPSHOT/framework8-migration-tool-8.0-SNAPSHOT.jar<br /><br />If you use maven you need to change the version number of the vaadin dependencies and also add for each dependency a corresponding legacy (compatibility) dependency.<br /><br /> &lt;dependency&gt;<br />  &lt;groupId&gt;com.vaadin&lt;/groupId&gt;<br />  &lt;artifactId&gt;vaadin-compatibility-shared&lt;/artifactId&gt;<br />  &lt;version&gt;${vaadin.version}&lt;/version&gt;<br /> &lt;/dependency&gt;<br /> &lt;dependency&gt;<br />  &lt;groupId&gt;com.vaadin&lt;/groupId&gt;<br />  &lt;artifactId&gt;vaadin-compatibility-client&lt;/artifactId&gt;<br />  &lt;version&gt;${vaadin.version}&lt;/version&gt;<br /> &lt;/dependency&gt;<br /><div>[...]</div><div>There are some small changes...</div><div><ul><li>Instead of component.getValue() you need to use ((HasValue)component).getValue()</li><li>If using the deprecated version 7 components you need to use the widgetset com.vaadin.v7.Vaadin7WidgetSet</li></ul><div>And also a new dependency is needed</div></div><div><pre><code>&lt;!-- https://mvnrepository.com/artifact/org.jsoup/jsoup --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jsoup&lt;/groupId&gt;
+    &lt;artifactId&gt;jsoup&lt;/artifactId&gt;
+    &lt;version&gt;1.11.3&lt;/version&gt;
+&lt;/dependency&gt;
+install -s mvn:org.jsoup/jsoup/1.11.3</code></pre>
+</div>
+{% endraw %}

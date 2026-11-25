@@ -1,0 +1,51 @@
+---
+title: "Create docker/container images in a Kubernetes Jenkins pipeline"
+date: 2022-05-16 08:46:00 +0200
+lang: en
+tags: []
+description: "The challenge is quite simple: To deploy a pice of software to Kubernetes it's necessary to create the (docker) container image in a pipeline. But the solution was not found…"
+permalink: /blog/2022/05/create-docker-images-in-kubernetes.html
+origin: https://blog.mhus.de/2022/05/create-docker-images-in-kubernetes.html
+---
+{% raw %}
+<p> The challenge is quite simple: To deploy a pice of software to Kubernetes it's necessary to create the (docker) container image in a pipeline.</p><p>But the solution was not found directly. The most articles found show how to use the docker socket or tcp port to create images but since docker is no more part of Kubernetes this will not work any more.</p><p>The solution is to use '<a href="https://github.com/GoogleContainerTools/kaniko" target="_blank">kaniko</a>'. Looks like the project is able to master image creation.</p><p>1) First install and configure Jenkins</p><p>values.xml</p><p>controller:</p><p>  JCasC:</p><p>    securityRealm: |-</p><p>      local:</p><p>        allowsSignup: false</p><p>        enableCaptcha: false</p><p>        users:</p><p>        - id: "admin"</p><p>          name: "Jenkins Admin"</p><p>          password: "xxx"</p><p>    authorizationStrategy: |-</p><p>      loggedInUsersCanDoAnything:</p><p>        allowAnonymousRead: false</p><p>  ingress:</p><p>       enabled: true</p><p>       paths: []</p><p>       apiVersion: "extensions/v1beta1"</p><p>       hostName: jenkins.mycluster.de</p><div><div>kubectl create namespace jx</div><div>helm install jenkins jenkins/jenkins -f values.yaml</div></div><p>2) To push images in a repository (e.g. sonatype nexus) it's necessary to configure the repository credentials:</p><p>Create a file 'config.json' (the name must fit) and import it into the Jenkins namespace:</p><div><pre><code>CI_REGISTRY=docker.mycluster.de
+CI_REGISTRY_USER=managernexus
+CI_REGISTRY_PASSWORD=$(pass cloud/prod/mycluster/managernexus)
+echo &quot;{\&quot;auths\&quot;:{\&quot;${CI_REGISTRY}\&quot;:{\&quot;auth\&quot;:\&quot;$(printf &quot;%s:%s&quot; &quot;${CI_REGISTRY_USER}&quot; &quot;${CI_REGISTRY_PASSWORD}&quot; | base64 | tr -d &#x27;\n&#x27;)\&quot;}}}&quot; &gt; config.json</code></pre>
+<br /></div><div>kubectl create secret generic -n jx docker-config --from-file=config.json
+</div><div>rm config.json</div><p>3) Create a pipeline:</p><div><pre><code>pipeline {
+  agent {
+    kubernetes {
+      yamlFile &#x27;jenkins-pod.yaml&#x27;
+    }
+  }
+  stages {
+    stage(&#x27;Build image&#x27;) {
+      steps {
+        container(&#x27;kaniko&#x27;) {
+          sh &quot;/kaniko/executor \
+          --dockerfile pwd/Dockerfile \
+          --context pwd \
+          --destination=docker.mycluster.de/myimage:${env.BUILD_ID} \
+          --destination=docker.mycluster.de/myimage:latest&quot;
+        }
+      }
+    }
+  }
+}</code></pre>
+</div><p>4) Create a pod configuration</p><div><pre><code>spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: docker-config
+      mountPath: /kaniko/.docker
+  volumes:
+  - name: docker-config
+    secret:
+      secretName: docker-config</code></pre>
+</div><p>5) Create a Jenkins pipeline</p><p>In Jenkins create a new pipeline using the 'Jenkins' file as pipeline. Create a Dockerfile in the project root to create the container image.</p>
+{% endraw %}

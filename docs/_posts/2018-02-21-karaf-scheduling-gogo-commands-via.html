@@ -1,0 +1,37 @@
+---
+title: "Karaf: Scheduling GoGo Commands Via Blueprint"
+date: 2018-02-21 21:26:00 +0100
+lang: en
+tags: []
+description: "A new feature with mhu-lib 3.3 is the karaf scheduling service. The service is designed to be configured by blueprint and executes gogo-shell scripts. In this way you are able to…"
+permalink: /blog/2018/02/karaf-scheduling-gogo-commands-via.html
+origin: https://blog.mhus.de/2018/02/karaf-scheduling-gogo-commands-via.html
+---
+{% raw %}
+A new feature with mhu-lib 3.3 is the karaf scheduling service. The service is designed to be configured by blueprint and executes gogo-shell scripts. In this way you are able to execute every regular maintenance by automation.<br />
+<br />
+Use this sample blueprint to print a hello world for every 2 minutes:<br />
+<br />
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"&gt;
+    &lt;bean 
+          
+          init-method="init" destroy-method="destroy"&gt;
+      &lt;property name="name" value="cmd_hello"/&gt;
+      &lt;property name="interval" value="*/2 * * * *"/&gt;
+      &lt;property name="command" value="echo 'hello world!'"/&gt;
+      &lt;property name="timerFactory" ref="TimerFactoryRef" /&gt;
+    &lt;/bean&gt;
+    &lt;reference
+       
+       interface="de.mhus.lib.core.util.TimerFactory" /&gt;
+    &lt;service 
+      interface="de.mhus.lib.karaf.services.SimpleServiceIfc" 
+      ref="cmd"&gt;
+        &lt;service-properties&gt;
+            &lt;entry key="osgi.jndi.service.name" value="cmd_hello"/&gt;
+        &lt;/service-properties&gt;
+    &lt;/service&gt;
+&lt;/blueprint&gt;
+</pre>
+{% endraw %}

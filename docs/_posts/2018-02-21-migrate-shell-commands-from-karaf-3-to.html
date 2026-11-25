@@ -1,0 +1,66 @@
+---
+title: "Migrate shell commands from Karaf 3 to Karaf 4"
+date: 2018-02-21 21:26:00 +0100
+lang: en
+tags: []
+description: "Today the migration from Karaf 3 to version 4 brings some new interesting effects. One of them is a full yellow 'blinking' source code where shell commands are implemented. It…"
+permalink: /blog/2018/02/migrate-shell-commands-from-karaf-3-to.html
+origin: https://blog.mhus.de/2018/02/migrate-shell-commands-from-karaf-3-to.html
+---
+{% raw %}
+Today the migration from Karaf 3 to version 4 brings some new interesting effects. One of them is a full yellow 'blinking' source code where shell commands are implemented.<br />
+It looks like all the shell interfaces from version 3 are deprecated now. The reason is that the developers want to define commands without using blueprint definition files in the OSGI INF folder any more. But to establish the new way a new interface is created and in focus.<br />
+To use the new interface you first  have to change the maven configuration of your project. Add the following parameters:<br />
+<pre> &lt;felix.plugin.version&gt;3.0.1&lt;/felix.plugin.version&gt;
+ &lt;maven.version&gt;2.0.9&lt;/maven.version&gt;</pre>
+And the following parts inside your main pom.xml:<br />
+<pre>&lt;dependencyManagement&gt;
+ &lt;dependencies&gt;
+ &lt;dependency&gt;
+ &lt;groupId&gt;org.apache.felix&lt;/groupId&gt;
+ &lt;artifactId&gt;maven-bundle-plugin&lt;/artifactId&gt;
+ &lt;version&gt;${felix.plugin.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;dependency&gt;
+ &lt;groupId&gt;org.apache.maven&lt;/groupId&gt;
+ &lt;artifactId&gt;maven-plugin-api&lt;/artifactId&gt;
+ &lt;version&gt;${maven.version}&lt;/version&gt;
+ &lt;/dependency&gt;
+ &lt;/dependencies&gt;
+ &lt;/dependencyManagement&gt;</pre>
+<pre> &lt;pluginManagement&gt;
+ &lt;plugins&gt;
+ &lt;plugin&gt;
+ &lt;groupId&gt;org.apache.karaf.tooling&lt;/groupId&gt;
+ &lt;artifactId&gt;karaf-services-maven-plugin&lt;/artifactId&gt;
+ &lt;version&gt;${karaf.version}&lt;/version&gt;
+ &lt;executions&gt;
+ &lt;execution&gt;
+ &lt;id&gt;service-metadata-generate&lt;/id&gt;
+ &lt;phase&gt;process-classes&lt;/phase&gt;
+ &lt;goals&gt;
+ &lt;goal&gt;service-metadata-generate&lt;/goal&gt;
+ &lt;/goals&gt;
+ &lt;/execution&gt;
+ &lt;/executions&gt;
+ &lt;/plugin&gt;
+ &lt;/plugins&gt; 
+ &lt;/pluginManagement&gt;</pre>
+Now you need to add the following build instruction to every sub project into the build/plugin part of the pom.xml:<br />
+<pre> &lt;plugin&gt;
+ &lt;groupId&gt;org.apache.karaf.tooling&lt;/groupId&gt;
+ &lt;artifactId&gt;karaf-services-maven-plugin&lt;/artifactId&gt;
+ &lt;/plugin&gt;</pre>
+This was the basic configuration to instruct maven to build everything right. Now you can remove the old blueprint.xml files because they are no more in use.<br />
+To create or update command add the following imports:<br />
+<pre>import org.apache.karaf.shell.api.action.Action;
+import org.apache.karaf.shell.api.action.Argument;
+import org.apache.karaf.shell.api.action.Command;
+import org.apache.karaf.shell.api.action.Option;</pre>
+Mark the class as component and service and enhance 'Action':<br />
+@Command(scope = "test", name = "cmd", description = "Test Command")<br /> @Service<br /> public class CmdTest implements Action {<br />
+The old interface had a method 'execute(Session)' but the new one is only 'execute()'. The parameter is left. To have access to the session you need to add a reference variable like this:<br />
+<pre>@Reference
+private Session session;</pre>
+after building and deploying into karaf engine the command is available as usually.
+{% endraw %}

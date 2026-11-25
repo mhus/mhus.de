@@ -1,0 +1,24 @@
+---
+layout: default
+title: Blog
+description: Fehler, Lösungen und Merkzettel zu Kubernetes, Java, Karaf, Vaadin und was sonst so anfällt.
+---
+<section class="blog-index">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <p class="eyebrow">Blog</p>
+      <h1>Worüber ich gestolpert bin</h1>
+      <p>Hier schreibe ich auf, worüber ich gestolpert bin und wie ich es gelöst habe. Die älteren Beiträge sind meist auf
+        Englisch. <a href="{{ '/blog/feed.xml' | relative_url }}">RSS-Feed</a></p>
+    </div>
+    {%- assign years = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
+    {%- for y in years %}
+    <h2 class="year">{{ y.name }}</h2>
+    <ul class="post-list">
+      {%- for post in y.items %}
+      {% include post-item.html post=post %}
+      {%- endfor %}
+    </ul>
+    {%- endfor %}
+  </div>
+</section>

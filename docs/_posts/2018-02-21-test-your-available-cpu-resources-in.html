@@ -1,0 +1,43 @@
+---
+title: "Test your available CPU resources in karaf"
+date: 2018-02-21 21:34:00 +0100
+lang: en
+tags: []
+description: "Times ago we start developing a fun tool to provoke extreme situations like out of memory or stack trace exception. Now I added a new feature to stress the CPU. I also count the…"
+permalink: /blog/2018/02/test-your-available-cpu-resources-in.html
+origin: https://blog.mhus.de/2018/02/test-your-available-cpu-resources-in.html
+---
+{% raw %}
+Times ago we start developing a fun tool to provoke extreme situations like out of memory or stack trace exception.  Now I added a new feature to stress the CPU. I also count the used time on the CPU to see how much CPU time is 'available'.<br />
+<br />
+Using the tool is a good indicator to show how much CPU time is available for the JVM. Specially in virtual environments this information is useful. But you need to set parameters carefully. Don't stress the CPU too long at once and use a sleep between the test cycles. So the hypervisor is not moving other VM guests out of your system and the result is valide.<br />
+<br />
+Naughty: Stress the CPU for a longer time and the VM host is yours.<br />
+<br />
+Install mhus-osgi-commands and use:<br />
+<pre></pre>
+<pre>shityo stress</pre>
+<pre>
+</pre>
+This example from my laptop:<br />
+<pre>
+</pre>
+<pre><pre><code>karaf@root()&gt; shityo stress threads=8
+
+Used cpu nanoseconds per second ...
+
+1: [8] 995M 982M 992M 994M 993M 996M 964M 996M = 7.916G
+
+2: [8] 994M 995M 992M 996M 990M 994M 995M 993M = 7.951G
+
+3: [8] 999M 998M 999M 998M 999M 997M 998M 997M = 7.988G
+
+4: [8] 998M 998M 999M 996M 997M 998M 999M 996M = 7.986G
+
+5: [8] 998M 997M 1000M 997M 997M 998M 998M 1000M = 7.988G
+
+6: [8] 998M 997M 999M 997M 998M 998M 962M 998M = 7.951G
+
+^C</code></pre>
+</pre>
+{% endraw %}

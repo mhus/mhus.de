@@ -1,20 +1,31 @@
 title: Mike Hummel
-tagline: Software architect & AI engineer
+tagline: Software-Architekt und AI Engineer
 description: >-
-  Mike Hummel — software architect and AI engineer from Franconia, Germany.
-  Builder of Vancetope, Nimbus, jknife and KT2L.
+  Mike Hummel, Software-Architekt und AI Engineer aus Oberfranken.
+  Projekte wie Vancetope, Nimbus, jknife und KT2L, dazu ein Blog über Fehler und Lösungen.
 url: "https://mhus.de"
 baseurl: ""
-lang: en
+lang: de
 
 author: Mike Hummel
 contact_email: impressum@mhus.de
 github: https://github.com/mhus
-blog: https://blog.mhus.de
 
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
+  - jekyll-feed
+
+feed:
+  path: blog/feed.xml
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      excerpt_separator: ""
 
 exclude:
   - README.md

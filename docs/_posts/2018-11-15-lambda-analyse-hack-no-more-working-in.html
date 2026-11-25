@@ -1,0 +1,51 @@
+---
+title: "Lambda analyse hack no more working in java 12"
+date: 2018-11-15 22:09:00 +0100
+lang: en
+tags: []
+description: "To bring errors in compile time I'm using java function references to refer object based queries. Since it is not possible to lookup the referenced function name (in fact a stupid…"
+permalink: /blog/2018/11/lambda-analyse-hack-no-more-working-in.html
+origin: https://blog.mhus.de/2018/11/lambda-analyse-hack-no-more-working-in.html
+---
+{% raw %}
+To bring errors in compile time I'm using java function references to refer object based queries. Since it is not possible to lookup the referenced function name (in fact a stupid behaviour) I was forced to use a hack to get the referenced name.<br />
+<br />
+Now it looks like the hack and even no other way exists to get the function name in java 12 (and maybe in earlier versions). I tested the current openjdk12 against my tool and it looks like it's not working.<br />
+<br />
+Therefore I switched the way to save my code consistency. The alternative way is to generate classes which are containing information about the existing function names.<br />
+<br />
+A maven plugin analyses existing classes and generates new ones. The generated classes will only be updated if the content is changes. In this way it is possible to commit the classes to the software repository.<br />
+<br />
+To switch your project you need to add the plugin configuration to your pom:<br />
+<br />
+       &lt;plugin&gt;<br />
+        &lt;groupId&gt;de.mhus.lib&lt;/groupId&gt;<br />
+        &lt;artifactId&gt;constgenerator-maven-plugin&lt;/artifactId&gt;<br />
+        &lt;version&gt;${mhulib.version}&lt;/version&gt;<br />
+    &lt;executions&gt;<br />
+            &lt;execution&gt;<br />
+              &lt;phase&gt;compile&lt;/phase&gt;<br />
+              &lt;goals&gt;<br />
+                &lt;goal&gt;const-generate&lt;/goal&gt;<br />
+              &lt;/goals&gt;<br />
+            &lt;/execution&gt;<br />
+          &lt;/executions&gt;<br />
+            &lt;dependencies&gt;<br />
+           &lt;dependency&gt;<br />
+             &lt;groupId&gt;de.mhus.lib&lt;/groupId&gt;<br />
+             &lt;artifactId&gt;mhu-lib-annotations&lt;/artifactId&gt;<br />
+             &lt;version&gt;${mhulib.version}&lt;/version&gt;<br />
+           &lt;/dependency&gt;<br />
+            &lt;/dependencies&gt;<br />
+       &lt;/plugin&gt;<br />
+
+
+<div>
+And mark the concerning classes with the annotation @GenerateConst rebuild the project to generate the new classes. The will be generated direct to the corresponding root class and add a underscore to the class name.</div>
+
+<div>
+Use the static fields to refer the function names.</div>
+
+<br />
+<br />
+{% endraw %}

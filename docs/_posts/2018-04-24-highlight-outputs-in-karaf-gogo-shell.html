@@ -1,0 +1,119 @@
+---
+title: "Highlight outputs in karaf gogo shell"
+date: 2018-04-24 11:24:00 +0200
+lang: en
+tags: []
+description: "The command shell:highlight in mhus-osgi-tools 1.3.5 will provide a command to search and highlight text via pipe: The basic usage are: service:list | highlight bundle The command…"
+permalink: /blog/2018/04/highlight-outputs-in-karaf-gogo-shell.html
+origin: https://blog.mhus.de/2018/04/highlight-outputs-in-karaf-gogo-shell.html
+---
+{% raw %}
+The command shell:highlight in mhus-osgi-tools 1.3.5 will provide a command to search and highlight text via pipe:
+<div>
+The basic usage are:</div>
+
+<div>
+<div>
+service:list | highlight bundle</div>
+</div>
+
+<div>
+The command accept regex expressions and by default the regex is case insensitive, the result is:</div>
+
+<div>
+<pre><code>[org.osgi.service.url.URLStreamHandlerService]
+
+----------------------------------------------
+
+ service.bundleid = 51
+
+ service.id = 31
+
+ service.scope = singleton
+
+ url.handler.protocol = [wrap]
+
+Provided by :
+
+ OPS4J Pax Url - wrap: (51)
+
+Used by:
+
+ Apache Karaf :: Deployer :: Wrap Non OSGi Jar (28)
+
+ System Bundle (0)</code></pre>
+</div>
+
+<div>
+More complex is the the option to search multiple words and change the color for each finding:</div>
+
+<div>
+<div>
+service:list | highlight \#blue bundle \#green service</div>
+</div>
+
+<div>
+The result:</div>
+
+<div>
+<pre><code>[org.osgi.service.url.URLStreamHandlerService]
+
+----------------------------------------------
+
+ service.bundleid = 51
+
+ service.id = 31
+
+ service.scope = singleton
+
+ url.handler.protocol = [wrap]
+
+Provided by :
+
+ OPS4J Pax Url - wrap: (51)
+
+Used by:
+
+ Apache Karaf :: Deployer :: Wrap Non OSGi Jar (28)
+
+ System Bundle (0)</code></pre>
+</div>
+
+<div>
+A nice feature to manipulate text output is the option to set a start and stop marker for findings. This is useful for a non color terminal:</div>
+
+<div>
+<div>
+service:list | highlight \#a[ \#o] service</div>
+</div>
+
+<div>
+The result:</div>
+
+<div>
+<pre><code>[org.osgi.[service].url.URLStreamHandler[Service]]
+
+----------------------------------------------
+
+ [service].bundleid = 51
+
+ [service].id = 31
+
+ [service].scope = singleton
+
+ url.handler.protocol = [wrap]
+
+Provided by :
+
+ OPS4J Pax Url - wrap: (51)
+
+Used by:
+
+ Apache Karaf :: Deployer :: Wrap Non OSGi Jar (28)
+
+ System Bundle (0)</code></pre>
+</div>
+
+<div>
+With more options it’s possible to switch on case sensitive '#Ion' or set background color '#Bblue'.</div>
+{% endraw %}

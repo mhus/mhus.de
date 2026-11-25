@@ -1,0 +1,12 @@
+---
+title: "Migrate mhus-sop to mhus-rest and mhus-micro"
+date: 2020-10-15 16:04:00 +0200
+lang: en
+tags: [dev]
+description: "For reorganisation I split the project mhus-sop to mhus-rest and mhus-micro and parts in the existing mhus-osgi-tools. Now mhus-sop (service orientated platform) is depecated. The…"
+permalink: /blog/2020/10/dev-migrate-mhus-sop-to-mhus-rest-and.html
+origin: https://blog.mhus.de/2020/10/dev-migrate-mhus-sop-to-mhus-rest-and.html
+---
+{% raw %}
+<p> For reorganisation I split the project mhus-sop to mhus-rest and mhus-micro and parts in the existing mhus-osgi-tools. Now mhus-sop (service orientated platform) is depecated.</p><br />The parts to handle rest interfaces is moved to mhus-rest. Why another rest framework? Because this rest is prepared to handle deep rest structures instead of for example jax-rs.<br /><br />The parts for Operations and Operation providers are moved to mhus-micro. This is the central framework to work with micro services. It's able to combine different micro service frameworks to one interface.<br /><br />The part AAA and ADB Service is moved into mhus-osgi-tools.<br /><br />Some interfaces are moved directly in mhus-lib. The tool IdentUtil will return the current ident without big actions.<br /><br /><a name='more'></a><br /><br />Before and After - mhus-config:<br /><br />de.mhus.osgi.sop.jms.operation.JmsRegistryProvider - de.mhus.micro.core.api.JmsApi<br />de.mhus.lib.core.security.AccountSource - de.mhus.lib.core.security.AccountSource<br />de.mhus.osgi.sop.api.aaa.TrustSource - de.mhus.lib.core.security.TrustSource<br />de.mhus.osgi.sop.impl.aaa.util.AccountFromFile - de.mhus.osgi.services.aaa.util.AccountFromFile<br />de.mhus.osgi.sop.impl.aaa.util.AuthFromFile - de.mhus.osgi.services.aaa.util.AuthFromFile<br />de.mhus.osgi.sop.impl.aaa.util.TrustFromFile - de.mhus.osgi.services.aaa.util.TrustFromFile<br />de.mhus.osgi.sop.impl.aaa.AccessApiImpl - de.mhus.osgi.services.aaa.AccessApiImpl<br />de.mhus.osgi.sop.api.aaa.AccessApi - de.mhus.lib.core.security.AccessApi<br />de.mhus.osgi.sop.impl.cluster.ClusterApiViaRegistry - de.mhus.osgi.services.cluster.ClusterApiViaRegistry<br />de.mhus.osgi.sop.api.cluster.ClusterApi - de.mhus.lib.core.base.service.ClusterApi<br />de.mhus.osgi.sop.impl.adb.SopDbManagerService - de.mhus.osgi.services.adb.SopDbManagerService<br /><br /><br />And ...<br /><br />move &lt;karaf&gt;/sop to &lt;karaf&gt;/data<br />
+{% endraw %}

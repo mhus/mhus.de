@@ -1,0 +1,12 @@
+---
+title: "Suspecte Assertation Exception mit Vaadin in Selenium Chrome Driver"
+date: 2024-06-17 22:15:00 +0200
+lang: de
+tags: [kt2l]
+description: "Für einen Abend Kopfschmerzen hat mich eine merkwürdige Exception gekostet, die nur in den Tests mit Selenium auftritt. In der Entwicklung ist die Exception nicht aufgetaucht.…"
+permalink: /blog/2024/06/kt2l-suspecte-assertation-exception-mit.html
+origin: https://blog.mhus.de/2024/06/kt2l-suspecte-assertation-exception-mit.html
+---
+{% raw %}
+<p>Für einen Abend Kopfschmerzen hat mich eine merkwürdige Exception gekostet, die nur in den Tests mit Selenium auftritt. In der Entwicklung ist die Exception nicht aufgetaucht.</p><p>Eingrenzen konnte ich die Quelle zumindest im Source-Code auf eine Änderung in der DeskTabBar. Hier habe ich anstelle von einem setContent( newPanel ) nun alle Panels in ein Layout gepackt und nur das Panel sichtbar, das aktuell aktiv ist. Damit gehen die Inhalte des Panels nicht verloren, bzw. muss nicht neu gerendert werden (vor allem mit Addons gibt es hier oft Probleme, z.B. vis und xTerm).</p><p>Bei der Änderung wird an jeden Panel die CSS-Class 'hidden' angehängt. Genau dieser Befehl löst die <code>Assertation: null</code> Exception von Vaadin aus. Die Exception wird in einem anderen Thread geworfen.</p><p>Als Lösung kann DaskTabBar nun beide Strategien umsetzen. In den Selenium-Tests wird das Alte Vorgehen genutzt, im Betrieb das Verbesserte.<br /></p>
+{% endraw %}

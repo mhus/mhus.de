@@ -1,0 +1,41 @@
+---
+title: "vaadin 14 with osgi and karaf"
+date: 2020-10-15 16:01:00 +0200
+lang: en
+tags: [dev]
+description: "After vaadin changed to the new flow technology it needs more effort to migrate to a new major version then 8. In my case it means to test how to get vaadin in karaf working.…"
+permalink: /blog/2020/10/dev-vaadin-14-with-osgi-and-karaf.html
+origin: https://blog.mhus.de/2020/10/dev-vaadin-14-with-osgi-and-karaf.html
+---
+{% raw %}
+<p> After vaadin changed to the new flow technology it needs more effort to migrate to a new major version then 8.</p><br />In my case it means to test how to get vaadin in karaf working.<br /><br />Unfortunately there is no direct karaf support in vaadin and there is no example or documentation how to do it. But I found OSGi support since vaadin 13. An example project was not working as described in the documentation (https://github.com/vaadin/base-starter-flow-osgi). Even with different branches and tags I get dependency exceptions in the OSGi framework.<br /><br />So I started creating a new configuration and project from scratch.<br /><br />I used my docker image with karaf 6.2.6 installed and java 11.0.3 to create a sample project and a bundle configuration.<br /><br />You can checkout the project within my example project (https://github.com/mhus/mhus-examples) in folder vaadin-flow/mhu-vaadin-examples1. Compile the sources with maven:<br /><br />git clone https://github.com/mhus/mhus-examples.git<br />cd mhus-examples/vaadin-flow/mhu-vaadin-examples1<br />mvn install<br /><br />and follow the instructions in readme.txt:<br /><br />First start the docker container and wait while the install process is finished:<br /><br />docker run -it --name vaadin-flow \<br /> -h flow \<br /> -p 8181:8181 \<br /> -v ~/.m2:/home/user/.m2 \<br /> mhus/apache-karaf:4.2.6_01<br /><div>Now you see the karaf prompt. Insert:</div><div><pre><code>feature:install http-whiteboard
+# deps
+install -s mvn:com.vaadin.external/gentyref/1.2.0.vaadin1
+install -s mvn:com.vaadin.external.gwt/gwt-elemental/2.8.2.vaadin2
+install -s mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/1.2.1
+install -s mvn:org.ow2.asm/asm/6.2.1
+install -s mvn:org.ow2.asm/asm-tree/6.2.1
+install -s mvn:org.ow2.asm/asm-commons/6.2.1
+#deps
+install -s mvn:com.helger/ph-commons/9.3.4
+install -s mvn:com.helger/ph-css/6.2.0
+install -s mvn:net.bytebuddy/byte-buddy/1.9.15
+#install -s mvn:commons-io/commons-io/1.4
+install -s mvn:commons-io/commons-io/2.5
+install -s mvn:org.jsoup/jsoup/1.11.3
+install -s mvn:commons-fileupload/commons-fileupload/1.4
+# flow
+install -s mvn:com.vaadin/flow-server/2.0.5
+install -s mvn:com.vaadin/flow-osgi/2.0.5
+install -s mvn:com.vaadin/flow-client/2.0.5
+install -s mvn:com.vaadin/flow-data/2.0.5
+install -s mvn:com.vaadin/flow-push/2.0.5
+install -s mvn:com.vaadin/flow-html-components/2.0.5
+# theme
+install -s mvn:com.vaadin/vaadin-lumo-theme/2.0.5
+# components
+install -s mvn:com.vaadin/vaadin-button-flow/2.0.1
+install -s mvn:com.vaadin/vaadin-notification-flow/2.0.0
+install -s mvn:com.vaadin/vaadin-ordered-layout-flow/2.0.0</code></pre>
+</div><div>To install the dependencies and now install the example project:</div><div>install -s mvn:de.mhus.example.vaadin/mhu-vaadin-example1/1.0.0-SNAPSHOT</div><div>Set start level to 81 so it will be started after all the dependencies:</div><div>start-level mhu-vaadin-example1 81</div>And now restart the container. You can press Ctrl+D, wait until it stopped and start the container again with<br /><br />docker start -ia vaadin-flow<br /><br />If the start sequence is finished you can open the GUI in the browser<br /><br />http://localhost:8181/gui/<br />In my case I see a button with an action. That's it!<br /><br />Important:<br /><br /><br /><ul><li>It's not possible to link a vaadin UI to the root '/'</li><li>It's not possible to have two vaadin applications in the same engine. Only one vaadin UI is possible !</li><li>If you update the application bundle you need to restart the Vaadin Flow OSGi Support. (restart "Vaadin Flow OSGi Support")</li></ul><br /><br /><br />
+{% endraw %}

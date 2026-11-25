@@ -1,0 +1,67 @@
+---
+title: "Installing mhu tools for karaf"
+date: 2018-02-21 21:17:00 +0100
+lang: en
+tags: []
+description: "The best choice for developers to install mhu tools is to use the current snapshot. With the snapshot the most of the discussed topics are working. I will make a note of the used…"
+permalink: /blog/2018/02/installing-mhu-tools-for-karaf.html
+origin: https://blog.mhus.de/2018/02/installing-mhu-tools-for-karaf.html
+---
+{% raw %}
+The best choice for developers to install mhu tools is to use the current snapshot. With the snapshot the most of the discussed topics are working. I will make a note of the used SNAPSHOT you can use it or use the following release. If you use the relese skip the following description and start with the karaf installation.<br />
+<h3>
+Build the current Snapshot</h3>
+<h4>
+Get the Sources</h4>
+<pre>git clone https://github.com/mhus/mhus-lib.git
+git clone https://github.com/mhus/mhus-osgi-tools.git</pre>
+<h4>
+Compile it into the local repository</h4>
+<pre>cd mhus-lib
+mvn install
+cd ..
+cd mhus-osgi-tools
+mvn install</pre>
+<h3>
+Karaf installation</h3>
+<h4>
+Setup Karaf</h4>
+Download Karaf 3.0.5 from the Website <a href="https://karaf.apache.org/index/community/download.html#Karaf3.0.5" rel="noopener" target="_blank">https://karaf.apache.org/index/community/download.html#Karaf3.0.5 </a>and unpack the zip bundle. Now change directory into the karaf directory 'apache-karaf-3.0.5' and start karaf for the first time ./bin/karaf and dtop it with 'logout'.<br />
+If you need help with proxys or other problems then ask <a href="https://duckduckgo.com/?q=karaf+proxy&amp;t=ffab&amp;ia=qa" rel="noopener" target="_blank">duckduckgo</a>.<br />
+<h4>
+Basic Setup</h4>
+Route the logging to the console for a better feedback. Open the file etc/org.ops4j.pax.logging.cfg and change the line<br />
+<pre>log4j.rootLogger=INFO, out, osgi:*</pre>
+into<br />
+<pre>log4j.rootLogger=INFO, out, osgi:*, stdout</pre>
+Start karaf again.<br />
+Install mhu-osgi-tools<br />
+Insert the following commands:<br />
+<pre>mhulib_version=3.2.9-SNAPSHOT
+mhuosgi_version=1.0.5-SNAPSHOT
+feature:repo-add activemq 5.12.1
+feature:repo-add cxf 2.7.11
+feature:install jdbc
+feature:install openjpa
+feature:install scr
+feature:install activemq-broker
+
+install -s mvn:mysql/mysql-connector-java/5.1.18
+install -s mvn:org.codehaus.jackson/jackson-core-asl/1.9.5
+install -s mvn:org.codehaus.jackson/jackson-mapper-asl/1.9.5
+install -s mvn:org.apache.httpcomponents/httpcore-osgi/4.2.1
+install -s mvn:org.apache.httpcomponents/httpclient-osgi/4.2.1
+install -s mvn:de.mhus.lib/mhu-lib-annotations/${mhulib_version}
+install -s mvn:de.mhus.lib/mhu-lib-core/${mhulib_version}
+install -s mvn:de.mhus.lib/mhu-lib-jms/${mhulib_version}
+install -s mvn:de.mhus.lib/mhu-lib-logging/${mhulib_version}
+install -s mvn:de.mhus.lib/mhu-lib-persistence/${mhulib_version}
+install -s mvn:de.mhus.lib/mhu-lib-karaf/${mhulib_version}
+install -s mvn:de.mhus.osgi/jms-commands/${mhuosgi_version}
+install -s mvn:de.mhus.osgi/mhus-osgi-commands/${mhuosgi_version}
+install -s mvn:de.mhus.osgi/mailosgi/${mhuosgi_version}
+install -s mvn:de.mhus.osgi/mailkaraf/${mhuosgi_version}</pre>
+Maybe you need to change the versions.<br />
+If you type 'list' you should see all installed bundles.<br />
+Now you are ready to use mhu osgi tools.
+{% endraw %}

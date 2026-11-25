@@ -1,0 +1,40 @@
+---
+title: "Fresh command shell:cut"
+date: 2018-02-21 21:19:00 +0100
+lang: en
+tags: []
+description: "Just added the command 'shell:cut' to allow splitting of lines. The command is more flexible as the original shell command and allows spliting by regular expressions. This is the…"
+permalink: /blog/2018/02/fresh-command-shellcut.html
+origin: https://blog.mhus.de/2018/02/fresh-command-shellcut.html
+---
+{% raw %}
+Just added the command 'shell:cut' to allow splitting of lines. The command is more flexible as the original shell command and allows spliting by regular expressions.<br />
+This is the option list:<br />
+<ul>
+<li>-r Replace regex</li>
+<li>-e Regular expression</li>
+<li>-d Seperate parts by this regex</li>
+<li>-t Trim every single part</li>
+<li>-f Fields expression</li>
+<li>-j Glue between fields</li>
+<li>-p Positions</li>
+</ul>
+Field expressions are a comma separated list of fields or field ranges. The first field is zero '0'.<br />
+Examples:<br />
+<pre>bundle:list|cut -d \\\| -t -j ' ' -f 1,3,2
+Active 80 0.0.0
+...
+bundle:list|cut -d \\\| -t -j ' ' -f 1-,0
+Active 80 1.4 Commons DBCP 71
+...
+bundle:list|cut -d \\\| -t -j ' ' -f 1,abc,2
+Active abc 80
+...</pre>
+The option -p followed by a list of ranges in the line.<br />
+Examples:<br />
+<pre>bundle:list|cut -j '&amp;' -p 10-20,1-10,abc
+ve |  80 |&amp;69 | Acti&amp;abc
+...</pre>
+Every positions definition can't be out of boundls. In the worst case it will be ignored. An empty line - without written fields - will be ignored.<br />
+The options -e and -r must be defined together and change the line content before processing the split mechanism.
+{% endraw %}

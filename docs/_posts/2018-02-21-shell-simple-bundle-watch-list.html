@@ -1,0 +1,57 @@
+---
+title: "Shell: Simple bundle watch list"
+date: 2018-02-21 21:27:00 +0100
+lang: en
+tags: []
+description: "Creating a watchlist could be laboriously (what a word :-/). Therefore using shell scripting could help a lot. The first sample shows how to grep a list of interesting bundles to…"
+permalink: /blog/2018/02/shell-simple-bundle-watch-list.html
+origin: https://blog.mhus.de/2018/02/shell-simple-bundle-watch-list.html
+---
+{% raw %}
+Creating a watchlist could be laboriously (what a word :-/). Therefore using shell scripting could help a lot.<br />
+<br />
+The first sample shows how to grep a list of interesting bundles to watch. In my case it's all mhu-lib bundles (add '--color never' to avoid creation of violating escape sequences):<br />
+<br />
+<pre>karaf@root()&gt; bundle:list|grep --color never mhu-lib
+ 89 | Active |  80 | 3.3.0.SNAPSHOT     | mhu-lib-annotations
+ 90 | Active |  80 | 3.3.0.SNAPSHOT     | mhu-lib-core
+ 91 | Active |  80 | 3.3.0.SNAPSHOT     | mhu-lib-jms
+ 92 | Active |  80 | 3.3.0.SNAPSHOT     | mhu-lib-karaf
+ 93 | Active |  80 | 3.3.0.SNAPSHOT     | mhu-lib-persistence
+karaf@root()&gt;</pre>
+<pre>
+</pre>
+I only need the bundle names, so cut the last column out of the result:<br />
+<br />
+<pre>karaf@root()&gt; bundle:list|grep --color never mhu-lib|cut -d '\|' -f 4 -t
+mhu-lib-annotations
+mhu-lib-core
+mhu-lib-jms
+mhu-lib-karaf
+mhu-lib-persistence
+karaf@root()&gt;</pre>
+<br />
+Now we need to parse it line by line. A loop would help. The results are used to add the bundle to the bundle:watch list<br />
+<pre>
+</pre>
+<pre>bundle:list|grep --color never mhu-lib|cut -d '\|' -f 4 -t|run -c "for b in read *;bundle:watch \$b;done"</pre>
+<br />
+The 'read *' command reads everything from the pipe and the for loop will cut it into lines and run the loop for every entry. The line content is stored in 'b'. To stop replacement of '$b' by the shell itself (should be done later in the loop) you need to escape the '$' character.<br />
+<br />
+If you want to use a persistent bundle watch use the 'mhu osgi tool' called 'bundle:persistentwatch'. You need to add the entries to the persistent list.<br />
+<pre>
+</pre>
+<pre>bundle:list|grep --color never mhu-lib|cut -d '\|' -f 4 -t|run -c "for b in read *;bundle:persistentwatch add \$b;done"</pre>
+<br />
+Print the list using 'list':<br />
+<pre>
+</pre>
+<pre>karaf@root()&gt; bundle:persistentwatch list
+Bundle             
+-------------------
+mhu-lib-annotations
+mhu-lib-core       
+mhu-lib-jms        
+mhu-lib-karaf      
+mhu-lib-persistence</pre>
+{% endraw %}

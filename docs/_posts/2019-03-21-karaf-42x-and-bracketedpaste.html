@@ -1,0 +1,74 @@
+---
+title: "Karaf 4.2.x and BRACKETED_PASTE"
+date: 2019-03-21 10:41:00 +0100
+lang: en
+tags: []
+description: "Since karaf 4.2.x (since I migrated from 4.0.10 to 4.2.2 and higher) I recognises a new feature in karaf console if copy and paste. If paste multi line content it will not pasted…"
+permalink: /blog/2019/03/karaf-42x-and-bracketedpaste.html
+origin: https://blog.mhus.de/2019/03/karaf-42x-and-bracketedpaste.html
+---
+{% raw %}
+Since karaf 4.2.x (since I migrated from 4.0.10 to 4.2.2 and higher) I recognises a new feature in karaf console if copy and paste. If paste multi line content it will not pasted as single commands. Instead it will be pasted as a block and executed at once.<br />
+<br />
+This feature is useful in some situations but in some it's also useful to work with the 'old style mode' - line by line.<br />
+<br />
+Another problem is that exiting the karaf console with escape sequences, e.g. in docker attach mode (ctrl+p-q) the BRACKETED_PASTE mode will not be disabled and you have to disable it manually by typing<br />
+<br />
+<blockquote>
+printf "\e[?2004l"</blockquote>
+
+<div>
+but it's not possible to paste it in this moment...</div>
+
+<div>
+To switch between the modes I found the reason for the behaviour in the LineReader from jline 3. The reader can be configured to enable and disable the option and is accessible in the karaf console by the parameter '.jline.reader' Use the command</div>
+
+<div>
+<div>
+$.jline.reader option BRACKETED_PASTE false</div>
+</div>
+
+<div>
+to disable the option and </div>
+
+<div>
+<div>
+$.jline.reader option BRACKETED_PASTE true</div>
+</div>
+
+<div>
+to enable the option.</div>
+
+<div>
+Since mhus-osgi-tools 1.6.0 I added sub commands in the command 'console' to control the options also. Use</div>
+
+<div>
+<div>
+console reader.set BRACKETED_PASTE true</div>
+</div>
+
+<div>
+to work with the jline reader and</div>
+
+<div>
+<div>
+console reader.status</div>
+</div>
+
+<div>
+to get a list of options and the actual status.<br />
+<br />
+Note:<br />
+<br />
+After looking around in the shell scripts of karaf I found the more common option to switch between modes. Use<br />
+<br />
+<div>
+setopt BRACKETED_PASTE</div>
+<br />
+and<br />
+<br />
+<div>
+unsetopt BRACKETED_PASTE</div>
+<br />
+to switch between modes.</div>
+{% endraw %}

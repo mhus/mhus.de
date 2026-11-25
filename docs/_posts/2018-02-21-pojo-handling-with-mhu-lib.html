@@ -1,0 +1,42 @@
+---
+title: "POJO handling with mhu-lib"
+date: 2018-02-21 21:25:00 +0100
+lang: en
+tags: []
+description: "mhu-lib brings a full featured POJO handler. The framework is able to parse POJO objects uses the found attributes to get and set values. Also a toolset to transform JSON or XML…"
+permalink: /blog/2018/02/pojo-handling-with-mhu-lib.html
+origin: https://blog.mhus.de/2018/02/pojo-handling-with-mhu-lib.html
+---
+{% raw %}
+mhu-lib brings a full featured POJO handler. The framework is able to parse POJO objects uses the found attributes to get and set values. Also a toolset to transform JSON or XML structures directly into/from POJO objects. It's al located in the package 'de.mhus.lib.core.pojo'.<br />
+<br />
+The base class is the POJO Parser. It's not working a lot but it brings all together. First important choice is how to parse. Parse strategies are implemented by default looking for attributes (AttributesStrategy) or functions (FunctionsStrategy). The default strategy (DefaultStrategy) combines both but it's possible to change the strategy object for the parser. Strategies are also looking for the @Embedded annotation and parse deeper inside this attributes. Important: The attribute based Strategy is also able to access 'private' declared values! Is no need to declare them all 'public'.<br />
+<br />
+The strategy creates a PojoModel which can be manipulated by filters. The default filter (DefaultFilter) remove @Hidden tagged attributes. The resulting model allows the coder to access the attributes.<br />
+<br />
+<img src="/assets/blog/pojo-handling-with-mhu-lib.png" alt="" loading="lazy"><br />
+An example POJO:<br />
+<pre>public class MyPojo {
+  private String name;
+  private long id;
+  private String displayName;
+
+  public String getName() {
+    return name;
+  }
+  public String getDisplayName() {
+    return displayName;
+  }
+  public void getId() {
+    return id;
+  }
+}</pre>
+Now use the POJOParser to create the POJOModel:<br />
+<pre>model = new PojoParser().parse(MyPojo.class).getModel();</pre>
+More complex, use only @Public tagged attributes and concat @Embedded with "_".:<br />
+<pre>model = new PojoParser().parse(MyPojo.class, "_", new Class[] {Public.class}).filter(true,false,true,false,true).getModel();</pre>
+To set the values get the model parameters. Identifiers will be lower case. To access 'displayName' the identifier is 'displayname':<br />
+<pre>model.getAttribute("displayname").set(instance, "this is a sample");</pre>
+The framework is a fast, stable and flexible way to use POJO objects in a common way.<br />
+Tipp: Create the model once and use it for all POJOs of the same type.
+{% endraw %}

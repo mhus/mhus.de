@@ -1,0 +1,16 @@
+---
+title: "Resolving a Renderer"
+date: 2018-02-21 21:30:00 +0100
+lang: en
+tags: []
+description: "Resolving a renderer for a resource is not as simple as it seams. The team from apache sling shows me that the rendering is more complex and should be more then a simple content…"
+permalink: /blog/2018/02/resolving-renderer.html
+origin: https://blog.mhus.de/2018/02/resolving-renderer.html
+---
+{% raw %}
+Resolving a renderer for a resource is not as simple as it seams. The team from apache sling shows me that the rendering is more complex and should be more then a simple content output.<br />
+<br />
+In modern WCM a resource is an abstract thing containing more meta data then pure content. All the  meta data together brings a useful content to the user. And there are different ways to present it. Html is the visible presentation of the data. Json and xml are technical presentations needed to download data in the background. Sling shows that we can have different renderer for the same content. It depends on the current use case.<br />
+<br />
+How to find the correct content renderer is an interesting question. Sling are using request parameters like 'request method' and parts of the requested path to find a resource. Parameters from the resource are linking to the correct script rendering the content (<a href="https://docs.adobe.com/content/docs/en/cq/5-6-1/developing/the_basics/_jcr_content/par/image_1.img.png" rel="noopener" target="_blank">see this picture</a>).
+{% endraw %}

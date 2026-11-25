@@ -27,7 +27,7 @@
   Array.prototype.forEach.call(document.querySelectorAll("[data-copy]"), function (btn) {
     btn.addEventListener("click", function () {
       var text = btn.getAttribute("data-copy");
-      var done = function () { btn.textContent = "copied"; setTimeout(function () { btn.textContent = "copy"; }, 1400); };
+      var done = function () { btn.textContent = "kopiert"; setTimeout(function () { btn.textContent = "kopieren"; }, 1400); };
       if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
     });
   });

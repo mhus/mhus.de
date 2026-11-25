@@ -1,0 +1,12 @@
+---
+title: "Sonatype Nexus fails with random \"peer not authenticated\" errors behind ingress"
+date: 2022-06-11 13:55:00 +0200
+lang: en
+tags: []
+description: "After installing nexus3 server in a kubernetes environment in the first view everything looks good. Server is running an accessible from the world. Users and roles are defined and…"
+permalink: /blog/2022/06/sonatype-nexus-fails-with-random-peer.html
+origin: https://blog.mhus.de/2022/06/sonatype-nexus-fails-with-random-peer.html
+---
+{% raw %}
+<p> After installing nexus3 server in a kubernetes environment in the first view everything looks good. Server is running an accessible from the world. Users and roles are defined and working.</p><p>But already in the first hours of working with the repository there are problems. The trick was retry the failed activity and everything went ok. It turned out that heavy activities failed a lot of times and a lot of retries have to be done to finish the tasks. Annoying if a release deploy failed. You need to increase the version number every time.</p><p>There were a few support in the internet for the problems most of the time handling SSL problems between maven and nexus. But it did not fix the problem.</p><p>It looks like maven and the used http library wagon have got problems with pooled connections if using ingress (a test with a standalone installation did not show the problem)  - The 'deep' reason is not really clear for me, need to invest more time for it.</p><p>The solution is to deny wagon to use pooled http connections. Add the option </p><blockquote><p>-Dmaven.wagon.http.pool=false</p></blockquote><p>to the maven command and no more 'peer not authenticated' will appear. The cost is that maven is slower now but however it works now. </p><p>The discussed solution about SSL problems did not solve the issue. Parameters like </p><blockquote><p>-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true </p></blockquote><p>did not fix it.</p><p><b>News:</b></p><p>After more investigation I found the problem. The client side java version 11.0.2 has a known SSL bug which will sporadic drop the SSL connection. This is not fixed with the ssl options above. An update to 11.0.15 fixed the problem.</p><p>Finally!</p>
+{% endraw %}

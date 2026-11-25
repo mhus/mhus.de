@@ -1,0 +1,25 @@
+---
+title: "Creating a flux sync configuration referring a config map for substitution"
+date: 2022-11-10 08:30:00 +0100
+lang: en
+tags: []
+description: "If you configure your k8s cluster with terraform one of the final steps is to install a fluxcd operator. The operator are responsible to manage the resources inside of the…"
+permalink: /blog/2022/11/creating-flux-sync-configuration.html
+origin: https://blog.mhus.de/2022/11/creating-flux-sync-configuration.html
+---
+{% raw %}
+<p> If you configure your k8s cluster with terraform one of the final steps is to install a fluxcd operator. The operator are responsible to manage the resources inside of the cluster. In this way a fully automatic creation process is possible.</p><p>To install <a href="https://registry.terraform.io/providers/fluxcd/flux/latest/docs">flux a terraform provider</a> is available preparing a install and sync configuration which can be installed in k8s using the kubernetes/kubectl providers.</p><p>In fluxcd itself it is possible to use <a href="https://fluxcd.io/flux/components/kustomize/kustomization/#variable-substitution">substitution</a>. This means you can use variables to prepare the k8s yaml files. This is useful for variable content like different cluster names and domain names for all stages. Or more specialised arn ids of created resources while creating the cluster in aws. To use substitution fluxcd offers to link the configuration to a config map. In the map a set of key values can be defined to replace variable values.</p><p>The map can also be created with terraform and the kubectl provider. Do not store secrets in the config map. Try to use secrets instead.</p><p>Applying the config map to the sync configuration of the fluxcd terraform source turned out as the biggest challenge. Since the provider <a href="https://github.com/fluxcd/terraform-provider-flux/issues/265#issuecomment-1308635563">do not support to set the <i>substituteFrom</i> parameter</a>. Therefore the configuration must be manipulated before applying to k8s.</p><pre><code>postBuildParameters = {
+    substituteFrom = [
+      {
+        kind = "ConfigMap"
+        name = "cluster-vars"
+      }
+    ]
+
+  }
+
+  decoded_documents = [ for v in data.kubectl_file_documents.sync.documents : yamldecode(v) ]
+  documents = [ for v in local.decoded_documents :
+    merge( v, v.kind == "Kustomization" ? { spec = merge(v.spec, {postBuild = local.postBuildParameters}) } : {})
+  ]</code></pre><p>In this way a config map named <i>kube-system/cluster-vars</i> will be used to substitute the variables.</p>
+{% endraw %}

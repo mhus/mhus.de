@@ -1,0 +1,12 @@
+---
+title: "Implemented Bearer JWS tokens"
+date: 2020-10-15 16:25:00 +0200
+lang: en
+tags: [mhus-lib]
+description: "mhus now supports bearer tokens for authentication. I used the project jjwt to implement the tokens and added dependencies of the current version 0.11.2. The token is implemented…"
+permalink: /blog/2020/10/implemented-bearer-jws-tokens.html
+origin: https://blog.mhus.de/2020/10/implemented-bearer-jws-tokens.html
+---
+{% raw %}
+<p> mhus now supports bearer tokens for authentication. I used the project jjwt to implement the tokens and added dependencies of the current version 0.11.2. The token is implemented to be used with apache shiro.</p><p>A new service JwtProvider implements creation and reading of the tokens. The keys if not exists will be created and stored in the keychain. Private and public keys in separate key sources. In this way the public keys can be published to other nodes.</p><p>A new interface BearerRealm must be used to mark realms with Bearer support. Using the interface a token can be created from the realm implementation. You should use the AccessUtil to create tokens.</p><p>The authentication is already implemented in rest and micro calls. Via rest a node '/jwt_token' can be used to create a token - expires after one hour - and use it as authentication.</p><p>To use jjwt with osgi I as forced to create a port project. First the 'feature' character of the bundles is not supported in the current felix/karaf version, second the use of java services is not successful in karaf.</p>
+{% endraw %}

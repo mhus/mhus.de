@@ -1,0 +1,64 @@
+---
+title: "Karaf Maven Tools performance issue in Eclipse IDE"
+date: 2018-02-21 21:34:00 +0100
+lang: en
+tags: []
+description: "If you develop karaf related bundles in Eclipse IDE or another Java IDE the common way is to create maven driven projects and let maven manage dependencies and build. Since karaf…"
+permalink: /blog/2018/02/karaf-maven-tools-performance-issue-in.html
+origin: https://blog.mhus.de/2018/02/karaf-maven-tools-performance-issue-in.html
+---
+{% raw %}
+If you develop karaf related bundles in Eclipse IDE or another Java IDE the common way is to create maven driven projects and let maven manage dependencies and build.<br />
+<br />
+Since karaf 4.0 you need to use a special maven plugin to parse the classes to find and automatic register Services. The plugin is called 'karaf-services-maven-plugin' and is working for every build.<br />
+Eclipse is using 'Maven Builder' to organise and build java classes in the background. So you can see errors while you are working on the files and detect compile problems fast. Therefore the Maven Builder is called for every 'Automatic Project Build' e. g. if you save files, start Eclipse and start exports / maven builds.<br />
+<br />
+I found that the performance of the automatic build rapide slow down if I start using the maven plugin. In fact every saving need 60 seconds. I have 48 maven related project in my workspace. Starting of eclipse keeps me from work for minimum 30 minutes!<br />
+<br />
+Not very happy about this behaviour I was searching for solutions. I reduced the usage of the karaf plugin and switched off automatic project builds in eclipse and closed unused projects. But with the effect that code changes where no more be refactored thru the source code. Not the solution I wanted.<br />
+Yesterday I came back to this plage and started downloading the code, tracing the execution time and looking for the performance. I find out that the Apache ClassFinder is part of the problem. Calling it eats most of the time and I found that the plugin collects all the dependencies/artefacts to be parsed for by the ClassFinder.<br />
+<br />
+The simplest way to reduce the runtime problem is to reduce the amount of parsed classes. So I just did it. I created a filter option for the collected artefacts and set the filter to the minimum amount of artefacts needed for the ClassFinder. Recommended are extended classes. To have a fast solution I created a fork of the karaf plugin and implemented my solution. Without using the filter it will work like before.<br />
+<br />
+Use this plugin configuration:<br />
+<br />
+<pre>  &lt;plugin&gt;
+      &lt;groupId&gt;<strong>de.mhus.ports.karaf.tooling</strong>&lt;/groupId&gt;
+      &lt;artifactId&gt;karaf-services-maven-plugin&lt;/artifactId&gt;
+      <strong>&lt;configuration&gt;</strong>
+<strong>        &lt;artifactInclude&gt;.*mhu.*&lt;/artifactInclude&gt;</strong>
+<strong>     &lt;/configuration&gt;</strong>
+  &lt;/plugin&gt;</pre>
+<pre>
+</pre>
+I marked the changes. To use it in eclipse you need to add the following plugin configuration:<br />
+<br />
+<pre>&lt;pluginManagement&gt;
+     &lt;plugins&gt;
+           &lt;plugin&gt;
+               &lt;groupId&gt;<strong>de.mhus.ports.karaf.tooling</strong>&lt;/groupId&gt;
+               &lt;artifactId&gt;karaf-services-maven-plugin&lt;/artifactId&gt;
+               &lt;version&gt;${karaf.tool.version}&lt;/version&gt;
+               &lt;executions&gt;
+                   &lt;execution&gt;
+                       &lt;id&gt;service-metadata-generate&lt;/id&gt;
+                       &lt;phase&gt;process-classes&lt;/phase&gt;
+                       &lt;goals&gt;
+                           &lt;goal&gt;service-metadata-generate&lt;/goal&gt;
+                       &lt;/goals&gt;
+<strong>                  &lt;configuration&gt;</strong>
+<strong>                    &lt;artifactInclude&gt;.*mhu.*&lt;/artifactInclude&gt;</strong>
+<strong>                  &lt;/configuration&gt;</strong>
+                   &lt;/execution&gt;
+               &lt;/executions&gt;
+          &lt;/plugin&gt;
+       &lt;/plugins&gt;    
+    &lt;/pluginManagement&gt;</pre>
+<pre>
+</pre>
+The configuration 'artifactInclude' contains a regular expression to filter the selected dependencies. You can see a list of all dependencies in the output of the plugin.<br />
+<br />
+In this way I reduced the execution time from more then 60 seconds to around 3 seconds.<br />
+<br />
+Problem solved!
+{% endraw %}

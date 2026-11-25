@@ -1,0 +1,25 @@
+---
+title: "Prepare karaf shell settings to work with mhu-osgi-tools"
+date: 2018-05-27 23:22:00 +0200
+lang: en
+tags: []
+description: "In karaf it's possible to configure a bashrc like file. This file will be executed every time a new gogo shell is opened. See scripting.adoc for details. You can edit the file…"
+permalink: /blog/2018/05/prepare-karaf-shell-settings-to-work.html
+origin: https://blog.mhus.de/2018/05/prepare-karaf-shell-settings-to-work.html
+---
+{% raw %}
+In karaf it's possible to configure a bashrc like file. This file will be executed every time a new gogo shell is opened. See <a href="https://github.com/apache/karaf/blob/master/manual/src/main/asciidoc/developer-guide/scripting.adoc">scripting.adoc</a> for details.<br />
+<br />
+You can edit the file etc/shell.init.script and append the lines<br />
+<br />
+<pre><code>console set
+
+logtail -c
+
+mhus:log settrail</code></pre>
+<br />
+this will activate useful mhu-osgi-tools settings for the console.<br />
+<br />
+First line change the current console settings to work with karaf console. Second send the log to console output. Only console local log entries. Last line will enable debug output to printed also to console. So you get deeper feedback to executed commands direct in the console.<br />
+<br />
+{% endraw %}

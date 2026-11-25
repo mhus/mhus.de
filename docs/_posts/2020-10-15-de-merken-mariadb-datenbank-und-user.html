@@ -1,0 +1,12 @@
+---
+title: "Merken: MariaDB Datenbank und User aufsetzen in 5 Minuten"
+date: 2020-10-15 15:56:00 +0200
+lang: de
+tags: []
+description: "Auch hier zuerst den Docker-Container starten. Ich benötige eine Version 10.2. Hier wieder der Link zur Beschreibung des Containers . docker run --name mariadb -e…"
+permalink: /blog/2020/10/de-merken-mariadb-datenbank-und-user.html
+origin: https://blog.mhus.de/2020/10/de-merken-mariadb-datenbank-und-user.html
+---
+{% raw %}
+<p> Auch hier zuerst den Docker-Container starten. Ich benötige eine Version 10.2. <a href="https://hub.docker.com/_/mariadb/">Hier wieder der Link zur Beschreibung des Containers</a>.</p><br /><div>docker run --name mariadb -e MYSQL_ROOT_PASSWORD=nein -d mariadb:10.2</div><br />und nun den Client aufrufen<br /><strong><br /></strong><br /><div>docker run -it --link mariadb:mysql --rm mariadb sh -c 'exec mysql -hmariadb -uroot -pnein'</div><br />Nachdem die Datenbank-Instanz bereit steht, die Datenbank, Benutzer und Rechte anlegen:<br /><strong><br /></strong><strong>CREATE DATABASE testdb1;<br />CREATE USER 'usr_testdb1'@'localhost' IDENTIFIED BY 'nein';<br />GRANT ALL PRIVILEGES ON testdb1.* TO 'usr_testdb1'@'localhost';</strong><br /><strong><br /></strong>Oder/Und eine Benutzer, der auch von außen zugreifen kann:<br /><br /><b>CREATE USER 'usr_testdb1'@'%' IDENTIFIED BY 'nein';</b><br /><b>GRANT ALL PRIVILEGES ON testdb1.* TO 'usr_testdb1'@'%';</b><br /><div><b><br /></b></div>
+{% endraw %}
