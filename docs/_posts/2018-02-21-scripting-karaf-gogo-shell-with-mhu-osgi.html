@@ -3,19 +3,19 @@ title: "Scripting karaf gogo shell with mhu-osgi"
 date: 2018-02-21 21:18:00 +0100
 lang: en
 tags: []
-description: "Scripting karaf shell could be very constricted. Therefor an extension could help to work more with the possibilities of the karaf engine. The main reason to enable more scripting…"
+description: "Scripting karaf shell could be very constricted. Therefore an extension could help to work more with the possibilities of the karaf engine. The main reason to enable more…"
 permalink: /blog/2018/02/scripting-karaf-gogo-shell-with-mhu-osgi.html
 origin: https://blog.mhus.de/2018/02/scripting-karaf-gogo-shell-with-mhu-osgi.html
 ---
 {% raw %}
-Scripting karaf shell could be very constricted. Therefor an extension could help to work more with the possibilities of the karaf engine.<br />
-The main reason to enable more scripting are the possibility to find easy maintenance solutions without starting a software project for every small task. (The same reason bash become popular.)<br />
+Scripting karaf shell could be very constricted. Therefore an extension could help to work more with the possibilities of the karaf engine.<br />
+The main reason to enable more scripting is the possibility to find easy maintenance solutions without starting a software project for every small task. (The same reason bash became popular.)<br />
 The main extensions are 'shell:bash' and 'shell:run'.<br />
 <h3>
 shell:bash</h3>
 This extension only works for unix systems. It clones the 'shell:exec' command and makes it easier to execute bash scripts and bring it together with gogo shell.<br />
 To use it you also need the commands 'shell:read' and 'shell:write' to work with files. The commands will be discussed later.<br />
-The following example writes the output of bundle:list to a file and executes bash script.<br />
+The following example writes the output of bundle:list to a file and executes a bash script.<br />
 <pre>bundle:list|write test.txt
 bash "cat test.txt|cut -d \\| -f 5"</pre>
 <h3>
@@ -30,20 +30,20 @@ An instruction must be in a separate line to be interpreted. The following instr
 <li><strong>else</strong> : otherwise block</li>
 <li><strong>endif</strong> : end of the condition block</li>
 <li><strong>while &lt;condition&gt;</strong> : start of a while loop</li>
-<li><strong>for &lt;var&gt; in &lt;list&gt;</strong> : start of a for loop. The list could be a iterable object or a string. The string will be split by New Line.</li>
+<li><strong>for &lt;var&gt; in &lt;list&gt;</strong> : start of a for loop. The list could be an iterable object or a string. The string will be split by New Line.</li>
 <li><strong>done</strong> : end of a loop block</li>
 <li><strong>label &lt;label&gt;</strong> : label declaration</li>
 <li><strong>goto &lt;label&gt;</strong> : jump to a label</li>
 <li><strong>exit</strong> : exit execution</li>
 </ul>
 The following special instructions are:<br />
-# commend<br />
-#--<br /> commend block<br /> --#<br />
+# comment<br />
+#--<br /> comment block<br /> --#<br />
 <h3>
 bash:read</h3>
-Reading from a file or stdin. Use 'read &lt;filename&gt;' to read the content of a file. The content will send to the pipe. Use the '-o' option to set it as variable content.<br />
-If you want to read the hole content from the pipe and send it to the next pipe or set it as variable content use a star '*' instead of the file name.<br />
-If you want to read only one line from the user input do not set a file name. The content of the line will be send to the pipe or set the variable with '-o'.<br />
+Reading from a file or stdin. Use 'read &lt;filename&gt;' to read the content of a file. The content will be sent to the pipe. Use the '-o' option to set it as variable content.<br />
+If you want to read the whole content from the pipe and send it to the next pipe or set it as variable content use a star '*' instead of the file name.<br />
+If you want to read only one line from the user input do not set a file name. The content of the line will be sent to the pipe or set the variable with '-o'.<br />
 Examples:<br />
 <pre>karaf@root()&gt; read -p prompt&gt; 
 prompt&gt;Hello World!

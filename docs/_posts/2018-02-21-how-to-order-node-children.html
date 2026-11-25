@@ -3,16 +3,16 @@ title: "How to order node children"
 date: 2018-02-21 21:31:00 +0100
 lang: en
 tags: []
-description: "Currently I store the child order information in the child properties. This means the child hold a 'sort' property which shows how to to sort this node into the list of children…"
+description: "Currently I store the child order information in the child properties. This means the child holds a 'sort' property which shows how to sort this node into the list of children…"
 permalink: /blog/2018/02/how-to-order-node-children.html
 origin: https://blog.mhus.de/2018/02/how-to-order-node-children.html
 ---
 {% raw %}
-Currently I store the child order information in the child properties. This means the child hold a 'sort' property which shows how to to sort this node into the list of children nodes.<br />
+Currently I store the child order information in the child properties. This means the child holds a 'sort' property which shows how to sort this node into the list of children nodes.<br />
 <br />
-This strategy shows a lot of problems. First of all if I try to change the order I have to change all child nodes. This could end in a access denied problem if I do not have access to one of the child nodes. Second if I move the child node a stare 'sort' parameter will maybe disturb the new order information.<br />
+This strategy shows a lot of problems. First of all if I try to change the order I have to change all child nodes. This could end in an access denied problem if I do not have access to one of the child nodes. Second if I move the child node a stale 'sort' parameter will maybe disturb the new order information.<br />
 <br />
-Therefore the best and mostly not used strategy is to store the order information at the paren node. If you are able to write the parent node, you are able to reorder the children of the node. And you are not forced to change these ones.<br />
+Therefore the best and mostly unused strategy is to store the order information at the parent node. If you are able to write the parent node, you are able to reorder the children of the node. And you are not forced to change these ones.<br />
 <br />
 I should implement it in cherry web soon in this way!
 {% endraw %}

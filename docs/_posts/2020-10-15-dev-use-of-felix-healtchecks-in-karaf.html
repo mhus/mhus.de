@@ -1,12 +1,12 @@
 ---
-title: "Use of felix healtchecks in karaf 4.2.6"
+title: "Use of felix healthchecks in karaf 4.2.6"
 date: 2020-10-15 16:04:00 +0200
 lang: en
 tags: [dev]
-description: "I tried to investigate in the felix healthcheck framework to create kubernetes health and ready checks. I found that the healthcheck can be used in karaf even. You have to install…"
+description: "I investigated the felix healthcheck framework to create kubernetes health and ready checks. I found that the healthcheck can even be used in karaf. You have to install it…"
 permalink: /blog/2020/10/dev-use-of-felix-healtchecks-in-karaf.html
 origin: https://blog.mhus.de/2020/10/dev-use-of-felix-healtchecks-in-karaf.html
 ---
 {% raw %}
-<p> I tried to investigate in the felix healthcheck framework to create kubernetes health and ready checks.</p><br />I found that the healthcheck can be used in karaf even. You have to install it manually with<br /><br />install -s mvn:org.apache.commons/commons-lang3/3.9<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.api/2.0.2<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.core/2.0.2<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.generalchecks/2.0.2<br /><br />And the webconsole:<br /><br />feature:install webconsole<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.webconsoleplugin/2.0.0<br /><br />Now you can see the check results with:<br /><br />http://localhost:8181/system/console/healthcheck<br /><br />The source is available under<br /><br />https://github.com/apache/felix/tree/archived/healthcheck/webconsoleplugin<br /><br /><br />
+<p> I investigated the felix healthcheck framework to create kubernetes health and ready checks.</p><br />I found that the healthcheck can even be used in karaf. You have to install it manually with<br /><br />install -s mvn:org.apache.commons/commons-lang3/3.9<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.api/2.0.2<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.core/2.0.2<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.generalchecks/2.0.2<br /><br />And the webconsole:<br /><br />feature:install webconsole<br />install -s  mvn:org.apache.felix/org.apache.felix.healthcheck.webconsoleplugin/2.0.0<br /><br />Now you can see the check results with:<br /><br />http://localhost:8181/system/console/healthcheck<br /><br />The source is available under<br /><br />https://github.com/apache/felix/tree/archived/healthcheck/webconsoleplugin<br /><br /><br />
 {% endraw %}

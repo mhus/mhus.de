@@ -1,5 +1,5 @@
 ---
-title: "Console madnes"
+title: "Console madness"
 date: 2020-10-15 16:00:00 +0200
 lang: en
 tags: [dev]
@@ -8,5 +8,5 @@ permalink: /blog/2020/10/dev-console-madnes.html
 origin: https://blog.mhus.de/2020/10/dev-console-madnes.html
 ---
 {% raw %}
-<p> It looks like it's not easy to recognise the console cols and rows in every case. After a period of continuous tries and fails I found that even the 'specialists' are not able to find the size of the console in every case. Just now I use jline to find the terminal size. But if you login into karaf using a ssh client it's not possible at all.</p><br />As reaction I created a console factory (as it should be) to create console instances for every thread and it's possible to overwrite the current used console instance. Now in karaf it's possible to use<br /><br />console set<br /><br />to set a session bound console instance which will recognise the size correctly by using the session instance.<br /><br />
+<p> It looks like it's not easy to recognise the console cols and rows in every case. After a period of continuous tries and fails I found that even the 'specialists' are not able to find the size of the console in every case. Currently I use jline to find the terminal size. But if you log into karaf using an ssh client it's not possible at all.</p><br />As a reaction I created a console factory (as it should be) to create console instances for every thread and it's possible to overwrite the currently used console instance. Now in karaf it's possible to use<br /><br />console set<br /><br />to set a session bound console instance which will recognise the size correctly by using the session instance.<br /><br />
 {% endraw %}

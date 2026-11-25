@@ -3,14 +3,14 @@ title: "Test your available CPU resources in karaf"
 date: 2018-02-21 21:34:00 +0100
 lang: en
 tags: []
-description: "Times ago we start developing a fun tool to provoke extreme situations like out of memory or stack trace exception. Now I added a new feature to stress the CPU. I also count the…"
+description: "Some time ago we started developing a fun tool to provoke extreme situations like out of memory or stack trace exception. Now I added a new feature to stress the CPU. I also count…"
 permalink: /blog/2018/02/test-your-available-cpu-resources-in.html
 origin: https://blog.mhus.de/2018/02/test-your-available-cpu-resources-in.html
 ---
 {% raw %}
-Times ago we start developing a fun tool to provoke extreme situations like out of memory or stack trace exception.  Now I added a new feature to stress the CPU. I also count the used time on the CPU to see how much CPU time is 'available'.<br />
+Some time ago we started developing a fun tool to provoke extreme situations like out of memory or stack trace exception.  Now I added a new feature to stress the CPU. I also count the used time on the CPU to see how much CPU time is 'available'.<br />
 <br />
-Using the tool is a good indicator to show how much CPU time is available for the JVM. Specially in virtual environments this information is useful. But you need to set parameters carefully. Don't stress the CPU too long at once and use a sleep between the test cycles. So the hypervisor is not moving other VM guests out of your system and the result is valide.<br />
+Using the tool is a good indicator to show how much CPU time is available for the JVM. Especially in virtual environments this information is useful. But you need to set parameters carefully. Don't stress the CPU too long at once and use a sleep between the test cycles. So the hypervisor is not moving other VM guests out of your system and the result is valid.<br />
 <br />
 Naughty: Stress the CPU for a longer time and the VM host is yours.<br />
 <br />

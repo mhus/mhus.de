@@ -3,7 +3,7 @@ title: "Parameter Related Classes Tree"
 date: 2018-02-21 21:24:00 +0100
 lang: en
 tags: []
-description: "In mhu-lib there is a general attention to properties or attribute related objects. The implementation follows the philosophy that most thirst are attribute related and that is…"
+description: "In mhu-lib there is a general attention to properties or attribute related objects. The implementation follows the philosophy that most things are attribute related and should be…"
 permalink: /blog/2018/02/parameter-related-classes-tree.html
 origin: https://blog.mhus.de/2018/02/parameter-related-classes-tree.html
 ---
@@ -12,13 +12,13 @@ origin: https://blog.mhus.de/2018/02/parameter-related-classes-tree.html
 <div>
 <img src="/assets/blog/parameter-related-classes-tree.png" alt="" loading="lazy"></div>
 <br />
-In mhu-lib there is a general attention to properties or attribute related objects. The implementation follows the philosophy that most thirst are attribute related and that is should be handled as the same. Properties and attributes are handled as the same not because they are the same but they have the same behavior.<br />
+In mhu-lib there is a general attention to properties or attribute related objects. The implementation follows the philosophy that most things are attribute related and should be handled the same way. Properties and attributes are handled the same, not because they are the same but they have the same behavior.<br />
 <br />
-First of all the IProperties class (since mhu-lib 3.3 a real interface) define a the basic behavior to set and get different value types. All java primitives are supported and the 'Object' type. The default implementation (e.g. MProperties) uses the getObject() variant and cast the object to the asked primitive by using the 'MCast' utilities. This simple structure is a flat properties store.<br />
-The 'ResourceNode' and 'WritableResourceNode' extends the structure to be a tree. With 'getNodes()' or 'getNode(key)' or 'getParent()' it is possible to traverse thru the tree structure.<br />
+First of all the IProperties class (since mhu-lib 3.3 a real interface) defines the basic behavior to set and get different value types. All java primitives are supported and the 'Object' type. The default implementation (e.g. MProperties) uses the getObject() variant and casts the object to the asked primitive by using the 'MCast' utilities. This simple structure is a flat properties store.<br />
+The 'ResourceNode' and 'WritableResourceNode' extends the structure to be a tree. With 'getNodes()' or 'getNode(key)' or 'getParent()' it is possible to traverse through the tree structure.<br />
 <br />
 An interesting extension of 'WritableResourceNode' is 'IConfig' with a lot of implementations to load configuration information from different types of sources like XML, JSON and properties files or a memory only variant.<br />
 <br />
-The 'CaoNode' from the Content Access Object implementation is also attribute based. The framework enables common access to different tree based content structures like filesystem. (It's currently recreated and not stable in later versions (mhu-lib 2.x) an EMC Documentum and Adobe AEM/CQ5 driver where available also.)<br />
+The 'CaoNode' from the Content Access Object implementation is also attribute based. The framework enables common access to different tree based content structures like filesystem. (It's currently recreated and not stable in later versions (mhu-lib 2.x) an EMC Documentum and Adobe AEM/CQ5 driver were also available.)<br />
 <br />
 {% endraw %}

@@ -9,10 +9,10 @@ origin: https://blog.mhus.de/2018/02/what-is-mhus-lib-for.html
 ---
 {% raw %}
 This article is about the need of mhus-lib and a short history to explain. It also describes the different sections shortly (First of all it's a library for the java VM).<br />
-The lib is called by my name because originally it was designed as a tool to solve problems I have in every project in the same way. The first version (in this time called mhu-lib) was a small set of static classes to convert data or to load simple information like the current host name.<br />
-In the next years the library was growing also solving more complex problems like how to handle different configurations in a common way. Handle POJOs and database access. It learned to serialize object into a RMDB and how to define forms in a generally way.  Also a common logging framework I really love was implemented. That was version 2.<br />
+The lib is called by my name because originally it was designed as a tool to solve problems I have in every project in the same way. The first version (at that time called mhu-lib) was a small set of static classes to convert data or to load simple information like the current host name.<br />
+In the following years the library grew, also solving more complex problems like how to handle different configurations in a common way. Handle POJOs and database access. It learned to serialize objects into an RDBMS and how to define forms in a general way.  Also a common logging framework I really love was implemented. That was version 2.<br />
 In version 3 all the things are becoming a more common and integrated touch. Package declarations changed and the library is now OSGi usable.<br />
-But why not using one of the common frameworks like apache-commons or spring? The answer is simple - for me - this library implements exactly what I need to develop and after some tries I know it's more robust, faster and handier than the alternatives. This is really subjective but - for me - true. I have some basic rules to implement functions:<br />
+But why not use one of the common frameworks like apache-commons or spring? The answer is simple - for me - this library implements exactly what I need to develop and after some tries I know it's more robust, faster and handier than the alternatives. This is really subjective but - for me - true. I have some basic rules to implement functions:<br />
 <ul>
 <li>Keep it simple: I don't want to use complex stuff</li>
 <li>Keep it generic</li>
@@ -29,14 +29,14 @@ Currently there are the following sections:<br />
 <li>Config<br /> A lot of different ways to load configuration files and provide it in the same interface into the application</li>
 <li>Console<br /> Tools to work with console out/in e.g. to print coloured text in ANSI terminals.</li>
 <li>Jms<br /> Classes to use and in the same way provide JMS interfaces</li>
-<li>Logging<br /> Simple and generic logging. There are adapters for java logger, log4j and a direct console output. Goals also a absolute simple interface and a faster logging. Concatenate all outputs instead of creating a string even if the log entry is not logged, e.g. debug output: log.d("interesting info", nr1, nr2, nr3, exception)</li>
-<li>Matcher<br /> Short parser and compiler to match inputs with a pattern. The pattern consists of regexpressions concatinated with operators like 'and', 'or' and 'not'.</li>
+<li>Logging<br /> Simple and generic logging. There are adapters for java logger, log4j and a direct console output. Goals are also an absolutely simple interface and a faster logging. Concatenate all outputs instead of creating a string even if the log entry is not logged, e.g. debug output: log.d("interesting info", nr1, nr2, nr3, exception)</li>
+<li>Matcher<br /> Short parser and compiler to match inputs with a pattern. The pattern consists of regular expressions concatenated with operators like 'and', 'or' and 'not'.</li>
 <li>Pojo<br /> Parse and manipulate POJOs. There are different strategy implementations like 'Function' or 'Attribute' strategies. And also different filter options. Getter, Setter and Actions are automatically bound together.</li>
 <li>Scheduler<br /> Scheduler for non blocking timer or cron scheduling.</li>
 <li>Strategy<br /> Classes to implement operations.</li>
-<li>MSingleton (system)<br /> The only but mutable stateful singleton in the hole library</li>
+<li>MSingleton (system)<br /> The only but mutable stateful singleton in the whole library</li>
 <li>Form<br /> Form model and implementation using Vaadin Framework</li>
-<li>j2ee<br /> Helper to work with J2EE, specially with web containers</li>
+<li>j2ee<br /> Helper to work with J2EE, especially with web containers</li>
 <li>JMS<br /> Helper to work with JMS-Messaging</li>
 <li>Karaf<br /> Commands and helpers to develop for the karaf OSGi framework. With a look for the mhu-lib sections</li>
 <li>Liferay<br /> Helpers to develop liferay portlets</li>

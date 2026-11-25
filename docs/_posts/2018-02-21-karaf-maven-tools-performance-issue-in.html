@@ -10,13 +10,13 @@ origin: https://blog.mhus.de/2018/02/karaf-maven-tools-performance-issue-in.html
 {% raw %}
 If you develop karaf related bundles in Eclipse IDE or another Java IDE the common way is to create maven driven projects and let maven manage dependencies and build.<br />
 <br />
-Since karaf 4.0 you need to use a special maven plugin to parse the classes to find and automatic register Services. The plugin is called 'karaf-services-maven-plugin' and is working for every build.<br />
+Since karaf 4.0 you need to use a special maven plugin to parse the classes to find and automatically register services. The plugin is called 'karaf-services-maven-plugin' and is working for every build.<br />
 Eclipse is using 'Maven Builder' to organise and build java classes in the background. So you can see errors while you are working on the files and detect compile problems fast. Therefore the Maven Builder is called for every 'Automatic Project Build' e. g. if you save files, start Eclipse and start exports / maven builds.<br />
 <br />
-I found that the performance of the automatic build rapide slow down if I start using the maven plugin. In fact every saving need 60 seconds. I have 48 maven related project in my workspace. Starting of eclipse keeps me from work for minimum 30 minutes!<br />
+I found that the performance of the automatic build slowed down rapidly if I start using the maven plugin. In fact every save needed 60 seconds. I have 48 maven related projects in my workspace. Starting of eclipse keeps me from work for at least 30 minutes!<br />
 <br />
-Not very happy about this behaviour I was searching for solutions. I reduced the usage of the karaf plugin and switched off automatic project builds in eclipse and closed unused projects. But with the effect that code changes where no more be refactored thru the source code. Not the solution I wanted.<br />
-Yesterday I came back to this plage and started downloading the code, tracing the execution time and looking for the performance. I find out that the Apache ClassFinder is part of the problem. Calling it eats most of the time and I found that the plugin collects all the dependencies/artefacts to be parsed for by the ClassFinder.<br />
+Not very happy about this behaviour I was searching for solutions. I reduced the usage of the karaf plugin and switched off automatic project builds in eclipse and closed unused projects. But with the effect that code changes were no longer refactored through the source code. Not the solution I wanted.<br />
+Yesterday I came back to this plague and started downloading the code, tracing the execution time and looking for the performance. I found out that the Apache ClassFinder is part of the problem. Calling it eats most of the time and I found that the plugin collects all the dependencies/artefacts to be parsed by the ClassFinder.<br />
 <br />
 The simplest way to reduce the runtime problem is to reduce the amount of parsed classes. So I just did it. I created a filter option for the collected artefacts and set the filter to the minimum amount of artefacts needed for the ClassFinder. Recommended are extended classes. To have a fast solution I created a fork of the karaf plugin and implemented my solution. Without using the filter it will work like before.<br />
 <br />
@@ -58,7 +58,7 @@ I marked the changes. To use it in eclipse you need to add the following plugin 
 </pre>
 The configuration 'artifactInclude' contains a regular expression to filter the selected dependencies. You can see a list of all dependencies in the output of the plugin.<br />
 <br />
-In this way I reduced the execution time from more then 60 seconds to around 3 seconds.<br />
+In this way I reduced the execution time from more than 60 seconds to around 3 seconds.<br />
 <br />
 Problem solved!
 {% endraw %}

@@ -3,14 +3,14 @@ title: "Update: Test your available CPU resources in karaf"
 date: 2018-03-05 21:56:00 +0100
 lang: en
 tags: []
-description: "In the new version coming up with mhus-osgi-tools 1.3.3 the test automatically adjust thread amount. It increase the thread count up to a level no more CPU time can be consumed.…"
+description: "In the new version coming up with mhus-osgi-tools 1.3.3 the test automatically adjusts the thread count. It increases the thread count up to a level where no more CPU time can be…"
 permalink: /blog/2018/03/update-test-your-available-cpu.html
 origin: https://blog.mhus.de/2018/03/update-test-your-available-cpu.html
 ---
 {% raw %}
-In the new version coming up with mhus-osgi-tools 1.3.3 the test automatically adjust thread amount. It increase the thread count up to a level no more CPU time can be consumed.<br />
+In the new version coming up with mhus-osgi-tools 1.3.3 the test automatically adjusts the thread count. It increases the thread count up to a level where no more CPU time can be consumed.<br />
 <br />
-Here an example from my laptop using the autoInfo=true parameter to see how the algorithm is working:<br />
+Here is an example from my laptop using the autoInfo=true parameter to see how the algorithm is working:<br />
 <br />
 <pre><code>karaf@root()&gt; shityo stress autoInfo=true
 

@@ -3,26 +3,26 @@ title: "BPM Error Handling Best Practice"
 date: 2018-02-21 21:29:00 +0100
 lang: en
 tags: []
-description: "Creating Business Processes using a BPM (in my case Bonitasoft BPM ) we had the problem to handle failures in the right way. In the first time we tried to catch all errors and…"
+description: "Creating Business Processes using a BPM (in my case Bonitasoft BPM ) we had the problem of handling failures the right way. At first we tried to catch all errors and handled them…"
 permalink: /blog/2018/02/bpm-error-handling-best-practice.html
 origin: https://blog.mhus.de/2018/02/bpm-error-handling-best-practice.html
 ---
 {% raw %}
-Creating Business Processes using a BPM (in my case <a href="http://www.bonitasoft.com/" rel="noopener" target="_blank">Bonitasoft BPM</a>) we had the problem to handle failures in the right way. In the first time we tried to catch all errors and handled them with a End/Terminate-Entity. Looking backward it was a odd way to process the exception states.<br />
+Creating Business Processes using a BPM (in my case <a href="http://www.bonitasoft.com/" rel="noopener" target="_blank">Bonitasoft BPM</a>) we had the problem of handling failures the right way. At first we tried to catch all errors and handled them with an End/Terminate entity. Looking back it was an odd way to process the exception states.<br />
 <br />
-The focus should be by maintenance and at most by the customers using the system. Customers don't want to reinitialize a process every time an error occurred. The want to maintainer to fixe it and let the process flow. Maintainer don't want to have much work with processes running.<br />
-I should show two very common scenarios happen in the real life:<br />
+The focus should be on maintenance and most of all on the customers using the system. Customers don't want to reinitialize a process every time an error occurred. They want the maintainer to fix it and let the process flow. Maintainers don't want to have much work with processes running.<br />
+I want to show two very common scenarios that happen in real life:<br />
 <ol>
-<li>All processes are based on tasks using operations working over the network. Maybe sending mails using a database etc. A lost of network connection (maybe only a segment) will cause a lot of tasks to fail and trigger the error handling.</li>
-<li>User is creating a process instance inserting data that's simply wrong. But the data can only be validated later in the flow. For example a wrong customer or contract id.</li>
+<li>All processes are based on tasks using operations working over the network. Maybe sending mails using a database etc. A lost network connection (maybe only a segment) will cause a lot of tasks to fail and trigger the error handling.</li>
+<li>A user creates a process instance and inserts data that's simply wrong. But the data can only be validated later in the flow. For example a wrong customer or contract id.</li>
 </ol>
 The first case shows a technical problem. It should be fixed by the administrators and then the processes should be restarted and do the work. It's a technical failure.<br />
 <br />
-The second case shows a professional problem. We have the wrong information from the user. A task will fail and could not be done, even if it will be retried. In this case a task error handler trail must be followed. And important: There could occur different incidents.<br />
+The second case shows a professional problem. We have the wrong information from the user. A task will fail and can't be done, even if it is retried. In this case a task error handler trail must be followed. And important: Different incidents could occur.<br />
 <br />
-To implement this concept we changed the definition of automatic tasks with connectors. A connector should throw an exception if something technical went wrong. This exception should the task force to change status to 'failed'. In this case we can retry the task if the technical problem is solved.<br />
+To implement this concept we changed the definition of automatic tasks with connectors. A connector should throw an exception if something technical went wrong. This exception should force the task to change its status to 'failed'. In this case we can retry the task if the technical problem is solved.<br />
 <br />
-Next we check the return values of the connector. If something professional went wrong the returned data should contain such a information, like "returncode=-5" or empty values "customerId=". Small post processor scripts can check the data and fire errors handlers to  jump into another part of the process.<br />
+Next we check the return values of the connector. If something professional went wrong the returned data should contain such information, like "returncode=-5" or empty values "customerId=". Small post processor scripts can check the data and fire error handlers to  jump into another part of the process.<br />
 <br />
 The following example shows the behavior. I used a manual task to insert the 'returned data'<br />
 <img src="/assets/blog/bonita_bpm.png" alt="" loading="lazy"><br />
@@ -33,7 +33,7 @@ The processors are very simple, e.g 'checkStatusNo':<br />
   throw new Exception("status is no");</pre>
 The 'checkStatusError' script will change the status of the task to 'failed'. It's the situation of a technical failure.<br />
 <br />
-In this way processes are more robust, customers are more happy and visual representation is more clear. It's a win-win situation ;-)<br />
+In this way processes are more robust, customers are happier and the visual representation is clearer. It's a win-win situation ;-)<br />
 <br />
 <a href="http://media.mhus.de/2016/test.errors-1.0.bos" rel="noopener" target="_blank">Download the sample process.</a>
 {% endraw %}

@@ -3,12 +3,12 @@ title: "Installing mhu tools for karaf"
 date: 2018-02-21 21:17:00 +0100
 lang: en
 tags: []
-description: "The best choice for developers to install mhu tools is to use the current snapshot. With the snapshot the most of the discussed topics are working. I will make a note of the used…"
+description: "The best choice for developers to install mhu tools is to use the current snapshot. With the snapshot most of the discussed topics work. I will note the used SNAPSHOT; you can use…"
 permalink: /blog/2018/02/installing-mhu-tools-for-karaf.html
 origin: https://blog.mhus.de/2018/02/installing-mhu-tools-for-karaf.html
 ---
 {% raw %}
-The best choice for developers to install mhu tools is to use the current snapshot. With the snapshot the most of the discussed topics are working. I will make a note of the used SNAPSHOT you can use it or use the following release. If you use the relese skip the following description and start with the karaf installation.<br />
+The best choice for developers to install mhu tools is to use the current snapshot. With the snapshot most of the discussed topics work. I will note the used SNAPSHOT; you can use it or the following release. If you use the release, skip the following description and start with the karaf installation.<br />
 <h3>
 Build the current Snapshot</h3>
 <h4>
@@ -26,8 +26,8 @@ mvn install</pre>
 Karaf installation</h3>
 <h4>
 Setup Karaf</h4>
-Download Karaf 3.0.5 from the Website <a href="https://karaf.apache.org/index/community/download.html#Karaf3.0.5" rel="noopener" target="_blank">https://karaf.apache.org/index/community/download.html#Karaf3.0.5 </a>and unpack the zip bundle. Now change directory into the karaf directory 'apache-karaf-3.0.5' and start karaf for the first time ./bin/karaf and dtop it with 'logout'.<br />
-If you need help with proxys or other problems then ask <a href="https://duckduckgo.com/?q=karaf+proxy&amp;t=ffab&amp;ia=qa" rel="noopener" target="_blank">duckduckgo</a>.<br />
+Download Karaf 3.0.5 from the Website <a href="https://karaf.apache.org/index/community/download.html#Karaf3.0.5" rel="noopener" target="_blank">https://karaf.apache.org/index/community/download.html#Karaf3.0.5 </a>and unpack the zip bundle. Now change directory into the karaf directory 'apache-karaf-3.0.5' and start karaf for the first time ./bin/karaf and stop it with 'logout'.<br />
+If you need help with proxies or other problems then ask <a href="https://duckduckgo.com/?q=karaf+proxy&amp;t=ffab&amp;ia=qa" rel="noopener" target="_blank">duckduckgo</a>.<br />
 <h4>
 Basic Setup</h4>
 Route the logging to the console for a better feedback. Open the file etc/org.ops4j.pax.logging.cfg and change the line<br />

@@ -10,17 +10,17 @@ origin: https://blog.mhus.de/2018/02/bonita-sub-processes.html
 {% raw %}
 Playing around with Bonita sub-processes gave me a couple of interesting discoveries...<br />
 The first step was to create a sub-process by selecting tasks and using the context menu to create a new sub-process. A sub-process is a closed process connected to the main process by an interface.<br />
-But before a list of founding using the 'create subprocess' function.<br />
+But first a list of findings when using the 'create subprocess' function:<br />
 <ol>
-<li>The new process lacks of a lane. It's easy to create and you should do it to define a default actor.</li>
-<li>The new process lacks of a start and end point. It's working without but for consistency and a defined flow you should create them.</li>
-<li>Every Task will be renamed to 'Copy of '. That's ugly.</li>
-<li>The ned process is disconnected from the main process. This means different variables. You need to map the in and out variable mapping to transfer date between the processes. This will not be done automatically after creating the sub-process. But it will be done at creation time. But the mapping is not correct at all.<br /> To fix the main-to-sub mapping change the mapping type from 'Assigned to Contract Input' to 'Assigned to Data'.<br /> To create the sub-to-main mapping use the 'Auto map' button.</li>
-<li>Sub processes have a separated set of actors also. You need to map it separately.</li>
+<li>The new process lacks a lane. It's easy to create and you should do it to define a default actor.</li>
+<li>The new process lacks a start and end point. It works without them, but for consistency and a defined flow you should create them.</li>
+<li>Every task will be renamed to 'Copy of '. That's ugly.</li>
+<li>The new process is disconnected from the main process. This means different variables. You need to define the in and out variable mapping to transfer data between the processes. This will not be done automatically after creating the sub-process. But it will be done at creation time. But the mapping is not correct at all.<br /> To fix the main-to-sub mapping change the mapping type from 'Assigned to Contract Input' to 'Assigned to Data'.<br /> To create the sub-to-main mapping use the 'Auto map' button.</li>
+<li>Sub-processes also have a separate set of actors. You need to map them separately.</li>
 <li>It's not possible to stop the main process inside the sub-process. Every 'end' will jump back into the main process execution. This could be a problem if fatal errors occur inside the sub-process.</li>
 </ol>
-To use the interface between main and sub-process you can use the variables mapping as described below. For every new variable you need extend the mapping. But you are free to use the sub-process in different situations and map it with multiple data sets.<br />
-More interesting is the possibility to send errors to the calling process. Use the 'end error' endpoint and define a error code. Add the 'catch error' event at the 'call activity' and you can handle the error result of the sub-process. Important: No data will be transferred from sub to main process in case of an error.<br />
-You can use my example process to explore the behavior. Initial, Step1 to Step4 are the default flow. Steps 2 and 3 are part of the sub-process. Try setting of variable values thru the process. In Step3 you can choose the 'Error' button to provoke an error. Use it and you will recognize that the data will not be changed in the main process. <a href="http://media.mhus.de/2016/test.subprocess-1.0.bos" rel="noopener" target="_blank">Download!</a><br />
+To use the interface between main and sub-process you can use the variables mapping as described above. For every new variable you need to extend the mapping. But you are free to use the sub-process in different situations and map it with multiple data sets.<br />
+More interesting is the possibility to send errors to the calling process. Use the 'end error' endpoint and define an error code. Add the 'catch error' event at the 'call activity' and you can handle the error result of the sub-process. Important: No data will be transferred from sub to main process in case of an error.<br />
+You can use my example process to explore the behavior. Initial, Step1 to Step4 are the default flow. Steps 2 and 3 are part of the sub-process. Try setting variable values through the process. In Step3 you can choose the 'Error' button to provoke an error. Use it and you will recognize that the data will not be changed in the main process. <a href="http://media.mhus.de/2016/test.subprocess-1.0.bos" rel="noopener" target="_blank">Download!</a><br />
 Sub-processes are interesting to separate or to re-use parts of the main process. But the benefits are rare if the creation and maintenance process should be simple.
 {% endraw %}

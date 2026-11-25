@@ -3,18 +3,18 @@ title: "Migrate from Karaf 3 to 4, Part 2"
 date: 2018-02-21 21:28:00 +0100
 lang: en
 tags: []
-description: "Migrating from karaf 3 to 4 another funny thing happened. All my jdbc datasources, configured in the deploy folder, where gone. In the first moment I was very hysteric because we…"
+description: "Migrating from karaf 3 to 4 another funny thing happened. All my jdbc datasources, configured in the deploy folder, were gone. In the first moment I was very hysterical because we…"
 permalink: /blog/2018/02/migrate-from-karaf-3-to-4-part-2.html
 origin: https://blog.mhus.de/2018/02/migrate-from-karaf-3-to-4-part-2.html
 ---
 {% raw %}
-Migrating from karaf 3 to 4 another funny thing happened. All my jdbc datasources, configured in the deploy folder, where gone. In the first moment I was very hysteric because we want to migrate the productive environment the next days. But in the next moment I recognized that we did all the test cases without an impact.<br />
+Migrating from karaf 3 to 4 another funny thing happened. All my jdbc datasources, configured in the deploy folder, were gone. In the first moment I was very hysterical because we wanted to migrate the productive environment the next days. But in the next moment I recognized that we did all the test cases without an impact.<br />
 <br />
-Playing around and in the end a deeper look into karaf sources showed me the solution. The new commands provided by karaf are using a more complex query and filter to find jdbc datasources. The new command jdbc:ds-list need a property 'dataSourceName' to be defined on the service to show the datasource in the list. The datasource itself was present like before but not shown.<br />
+Playing around and in the end a deeper look into karaf sources showed me the solution. The new commands provided by karaf are using a more complex query and filter to find jdbc datasources. The new command jdbc:ds-list needs a property 'dataSourceName' to be defined on the service to show the datasource in the list. The datasource itself was present like before but not shown.<br />
 <br />
-First I reimplemented the old command jdbc:datasources and showed all the datasources present as they are, by implemented interface (mhus-osgi-tools). Then I changed all the blueprint xml files and append the claimed property<br />
+First I reimplemented the old command jdbc:datasources and showed all the datasources present as they are, by implemented interface (mhus-osgi-tools). Then I changed all the blueprint xml files and appended the required property<br />
 <br />
 &lt;entry key="dataSourceName" value="${name}"/&gt;<br />
 <br />
-to be compatible to the new jdbc commands of karaf.
+to be compatible with the new jdbc commands of karaf.
 {% endraw %}

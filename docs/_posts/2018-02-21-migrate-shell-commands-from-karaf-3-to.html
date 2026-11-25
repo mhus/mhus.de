@@ -51,16 +51,16 @@ Now you need to add the following build instruction to every sub project into th
  &lt;groupId&gt;org.apache.karaf.tooling&lt;/groupId&gt;
  &lt;artifactId&gt;karaf-services-maven-plugin&lt;/artifactId&gt;
  &lt;/plugin&gt;</pre>
-This was the basic configuration to instruct maven to build everything right. Now you can remove the old blueprint.xml files because they are no more in use.<br />
-To create or update command add the following imports:<br />
+This was the basic configuration to instruct maven to build everything right. Now you can remove the old blueprint.xml files because they are no longer in use.<br />
+To create or update a command add the following imports:<br />
 <pre>import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;</pre>
 Mark the class as component and service and enhance 'Action':<br />
 @Command(scope = "test", name = "cmd", description = "Test Command")<br /> @Service<br /> public class CmdTest implements Action {<br />
-The old interface had a method 'execute(Session)' but the new one is only 'execute()'. The parameter is left. To have access to the session you need to add a reference variable like this:<br />
+The old interface had a method 'execute(Session)' but the new one is only 'execute()'. The parameter is gone. To have access to the session you need to add a reference variable like this:<br />
 <pre>@Reference
 private Session session;</pre>
-after building and deploying into karaf engine the command is available as usually.
+After building and deploying into karaf engine the command is available as usual.
 {% endraw %}

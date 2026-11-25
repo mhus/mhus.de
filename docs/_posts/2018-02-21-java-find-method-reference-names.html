@@ -3,13 +3,13 @@ title: "Java: Find Method Reference Names"
 date: 2018-02-21 21:33:00 +0100
 lang: en
 tags: []
-description: "Since Java 8 it's possible to use references to methods like it is in most other languages already standard. The notation is Class::MethodName, e.g. MyClass::myMethod But the new…"
+description: "Since Java 8 it's possible to use references to methods like it is already standard in most other languages. The notation is Class::MethodName, e.g. MyClass::myMethod But the new…"
 permalink: /blog/2018/02/java-find-method-reference-names.html
 origin: https://blog.mhus.de/2018/02/java-find-method-reference-names.html
 ---
 {% raw %}
-Since Java 8 it's possible to use references to methods like it is in most other languages already standard. The notation is Class::MethodName, e.g. MyClass::myMethod<br />
-But the new Feature is not what it promise. The developer would expect to get a reference object like Method to work with the referenced method. But Java did not implement real References it packs the reference in a calling lambda expression. Something like (o) -&gt; o.myMethod() and returns a reference to this lambda construct.<br />
+Since Java 8 it's possible to use references to methods like it is already standard in most other languages. The notation is Class::MethodName, e.g. MyClass::myMethod<br />
+But the new feature is not what it promises. The developer would expect to get a reference object like Method to work with the referenced method. But Java did not implement real references, it packs the reference in a calling lambda expression. Something like (o) -&gt; o.myMethod() and returns a reference to this lambda construct.<br />
 <br />
 What a stupid behaviour!<br />
 <br />
@@ -20,11 +20,11 @@ Short: The solution is to analyse the byte code and grab the method name out of 
 Long:<br />
 <br />
 <a name='more'></a><br />
-Using google I found only one solution to get the name of the referenced method. It's by calling the method itself and looking for the stacktrace and extract the name of the called method. The contra of this way is the active interference of the running program. Calling a method without the explicit need or knowledge of the consequences is not really clever.<br />
+Using google I found only one solution to get the name of the referenced method. It's by calling the method itself and looking for the stacktrace and extract the name of the called method. The downside of this way is the active interference of the running program. Calling a method without the explicit need or knowledge of the consequences is not really clever.<br />
 <br />
-Therefore I searched another way to get the name of the reference and I found another not really clever, but not interferencing way for it. The basic idea is to get the byte code of the lambda expression and search for the referenced method inside it. It should be a small amount of code and it should be easy to extract the name and find some sort of readable information. Hopefully every time on the same place.<br />
+Therefore I searched another way to get the name of the reference and I found another not really clever, but non-interfering way for it. The basic idea is to get the byte code of the lambda expression and search for the referenced method inside it. It should be a small amount of code and it should be easy to extract the name and find some sort of readable information. Hopefully every time on the same place.<br />
 <br />
-The first challenge was to get the byte code of an existing lambda expression. I get help from a library called '<a href="http://bytebuddy.net/">Byte Buddy</a>' and 'Byte Buddy Agent'. With a little bit magic it will return the byte array (Thx a lot!).<br />
+The first challenge was to get the byte code of an existing lambda expression. I got help from a library called '<a href="http://bytebuddy.net/">Byte Buddy</a>' and 'Byte Buddy Agent'. With a little bit of magic it will return the byte array (Thx a lot!).<br />
 <br />
 <pre>privatestaticfinal Instrumentation instrumentation = ByteBuddyAgent.install();
 staticbyte[] getByteCodeOf(Class&lt;?&gt; c) throws IOException {
@@ -34,7 +34,7 @@ staticbyte[] getByteCodeOf(Class&lt;?&gt; c) throws IOException {
     return resolution.resolve();
 }</pre>
 <br />
-After getting the byte code and using hex dumps to analyse the code I found that it was not simple like I hoped to find the method name. The dumps are very different depending of the nature of the method. But with analytic know how it's possible to isolate the method name. It's not my intention to analyse the code and understand the way it works. I remember from university this is a NP Hard Problem. Other people should deal with it.<br />
+After getting the byte code and using hex dumps to analyse the code I found that it was not as simple as I hoped to find the method name. The dumps are very different depending on the nature of the method. But with analytic know how it's possible to isolate the method name. It's not my intention to analyse the code and understand the way it works. I remember from university this is an NP-hard problem. Other people should deal with it.<br />
 <br />
 A sample:<br />
 <pre></pre>
@@ -60,16 +60,16 @@ A sample:<br />
 00000014 00010002 00000008 2BC0000F B60013B0  &lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;02&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;08&gt;+?&lt;00&gt;&lt;0F&gt;ﾶ&lt;00&gt;&lt;13&gt;ﾰ
 00000000 00150000 00060001 000D0000 0000      &lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;15&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;06&gt;&lt;00&gt;&lt;01&gt;&lt;00&gt;&lt;BR&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;</pre>
 <br />
-Let's try it with logic: First remove all the byte code command crap. They are separators to find the strings between them. Looks like there is no special byte code before or after the searched string (in this case 'getMyByteArray'). But I found it's every time after the pattern '$Hidden;'. Everything before should be ignored. Moreover ignore all string including impossible characters for method names like [ ( / etc. Most of the times I found the the method name in this way as the first accepted string.<br />
+Let's try it with logic: First remove all the byte code command crap. They are separators to find the strings between them. Looks like there is no special byte code before or after the searched string (in this case 'getMyByteArray'). But I found it's every time after the pattern '$Hidden;'. Everything before should be ignored. Moreover ignore all strings including impossible characters for method names like [ ( / etc. Most of the times I found the method name in this way as the first accepted string.<br />
 <br />
-A special rule was needed for primitive return values. In this case a string like 'intValue' or 'charValue'. So I have to ignore the first occurrence of this strings. Not good if the method itself is 'intValue()'.<br />
+A special rule was needed for primitive return values. In this case a string like 'intValue' or 'charValue'. So I have to ignore the first occurrence of these strings. Not good if the method itself is 'intValue()'.<br />
 <br />
-As conclusion it is possible to get the name of the referenced method but it's a risk. If the signature of the lambda byte code changes in another java version or maybe another platform the algorithm to find the name could fail. But the benefits using method references instead of  strings including the name of the method (causing errors in runtime) are very important if you want to write robust and refactorable program code.<br />
+In conclusion it is possible to get the name of the referenced method but it's a risk. If the signature of the lambda byte code changes in another java version or maybe another platform the algorithm to find the name could fail. But the benefits using method references instead of  strings including the name of the method (causing errors in runtime) are very important if you want to write robust and refactorable program code.<br />
 <br />
 The main problem is that Oracle fails to implement a correct method reference.<br />
 <br />
 Update:<br />
 <br />
-With java 9 and above this hack is no more working.<br />
+With java 9 and above this hack no longer works.<br />
 <br />
 {% endraw %}
